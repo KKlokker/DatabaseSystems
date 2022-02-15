@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.23 (MiKTeX 21.8) (preloaded format=pdflatex 2021.11.24)  8 FEB 2022 11:47
+This is pdfTeX, Version 3.141592653-2.6-1.40.23 (MiKTeX 21.8) (preloaded format=pdflatex 2021.11.24)  13 FEB 2022 01:47
 entering extended mode
 **./main.tex
 (main.tex
@@ -1031,17 +1031,14 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
 [1
 
-{C:/Users/Main User/AppData/Local/MiKTeX/pdftex/config/pdftex.map}]
-
-Package hyperref Warning: old toc file detected, not used; run LaTeX again.
-
+{C:/Users/Main User/AppData/Local/MiKTeX/pdftex/config/pdftex.map}] (main.toc)
 \tf@toc=\write6
 \openout6 = `main.toc'.
 
-[2
+ [2
 
 ]
-<assets/W6E1.png, id=19, 490.83376pt x 459.21562pt>
+<assets/W6E1.png, id=118, 490.83376pt x 459.21562pt>
 File: assets/W6E1.png Graphic file (type png)
 <use assets/W6E1.png>
 Package pdftex.def Info: assets/W6E1.png  used on input line 31.
@@ -1119,23 +1116,17 @@ Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `math shift' on input line 95.
 
 [6] (main.aux)
-
-Package rerunfilecheck Warning: File `main.out' has changed.
-(rerunfilecheck)                Rerun to get outlines right
-(rerunfilecheck)                or use package `bookmark'.
-
-Package rerunfilecheck Info: Checksums for `main.out':
-(rerunfilecheck)             Before: D41D8CD98F00B204E9800998ECF8427E;0
-(rerunfilecheck)             After:  B163A34B69DC5BC3D35AA43BDCD0BCA6;5225.
+Package rerunfilecheck Info: File `main.out' has not changed.
+(rerunfilecheck)             Checksum: B163A34B69DC5BC3D35AA43BDCD0BCA6;5225.
  ) 
 Here is how much of TeX's memory you used:
- 30010 strings out of 478927
- 593554 string characters out of 2850602
- 877512 words of memory out of 3000000
- 47346 multiletter control sequences out of 15000+600000
+ 30032 strings out of 478927
+ 594020 string characters out of 2850602
+ 879700 words of memory out of 3000000
+ 47366 multiletter control sequences out of 15000+600000
  412530 words of font info for 62 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 106i,6n,108p,426b,826s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 106i,6n,108p,567b,826s stack positions out of 5000i,500n,10000p,200000b,80000s
  <C:\Users\Main User\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\
 tcrm1200.pk><C:/Users/Main User/AppData/Local/Programs/MiKTeX/fonts/type1/publi
 c/amsfonts/cm/cmbx12.pfb><C:/Users/Main User/AppData/Local/Programs/MiKTeX/font
@@ -1143,9 +1134,9 @@ s/type1/public/amsfonts/cm/cmmi12.pfb><C:/Users/Main User/AppData/Local/Program
 s/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/Main User/AppData/L
 ocal/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr17.pfb><C:/Users/Main Us
 er/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
-Output written on main.pdf (6 pages, 113969 bytes).
+Output written on main.pdf (6 pages, 129038 bytes).
 PDF statistics:
- 93 PDF objects out of 1000 (max. 8388607)
+ 173 PDF objects out of 1000 (max. 8388607)
  28 named destinations out of 1000 (max. 500000)
- 18 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 170 words of extra memory for PDF output out of 10000 (max. 10000000)
 

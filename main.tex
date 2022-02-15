@@ -58,9 +58,9 @@
 					The transaction also manages such that every execution is isolated in case of revertion.\\
 					The transaction followed the ACID test, where
 					\begin{itemize}
-						\item A - atomicity which ensures every execution is done at 1 step at the time
+						\item A - atomicity which ensures that in case of error a transaction is never half completed
 						\item C - consistency in data and data constraints
-						\item I - isolation of every transaction
+						\item I - isolation ofe ach operation done in order in a transaction
 						\item D - durability of data such it is never lost after a transaction
 					\end{itemize}
 	\section{The relational model of data}

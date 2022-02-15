@@ -91,9 +91,9 @@
 				\subsubsection{Write a schema for $Printer$}
 					CREATE TABLE Printer(INT model, BOOLEAN color, VARCHAR[20] type, FLOAT price, FOREIGN KEY(Products) REFERENCES Products(model))\\
 				\subsubsection{Write an alternation for Printer and delete the attribute color}
-					ALTER Printer DROP color 
+					ALTER TABKE Printer DROP color 
 				\subsubsection{Add an $od$ attribute for PC, which defaults to none an otherwise can be cd or dvd}
-					ALTER PC ADD VARCHAR[20] od DEFAULT 'none'
+					ALTER TABLE PC ADD VARCHAR[20] od DEFAULT 'none'
 					
 				
 			
