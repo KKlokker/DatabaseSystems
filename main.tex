@@ -87,6 +87,24 @@
 	</Movie>
 </Movies>
 			\end{lstlisting}
+		\subsection{Document Type Definition model}
+			This is model based on XML to standify a more text based model of a database. This model focus on all the data types in a database and how they are nested.
+			An example is as follows:
+			\begin{lstlisting}            
+<!DOCTYPE Stars [
+	<!ELEMENT Stars (Star*)>
+	<!ELEMENT Star (Name, Address+, Movie*)>
+	<!ELEMENT Name (#PCDATA)>
+	<!ELEMENT ADDRESS (Street, City)>
+	<!ELEMENT Street (#PCDATA)>
+	<!ELEMENT CITY (#PCDATA)>
+	<!ELEMENT Movie EMPTY>
+		<!ATLIST Title CDATA #REQUIRED, Genre CDATA #IMPLIED>
+]>
+		\end{lstlisting}
+		Here $\#PCDATA$ is some data for an element and it can here be seen how nesting is allowed by defining star with address wich is also defined later.\\
+		Here the database Stars also include any number of star as stated at first.\\
+		The last movie is an alternative writing were instead of $<Movie>Hello</Movie>$ the $EMPTY$ makes it be $<Movie Title="Hello", "Comedy">$, $CDATA$ is simply characterData and $\#REQUIRED$ means it must be filled whereas $\#IMPLIED$ is optional.
 		\subsection{The basics of relational database}
 			Relation refers to the two dimensional table of data.With attributes being the coloumns and rows being a tuple. The tuple is then made of an relations where a relation with attributes are a schema. \\
 			A relation is defined by $Name(attribute:type, attribute2: type)$ and a tuple is in the same order and valeis for the given attributes.\\
@@ -114,6 +132,32 @@
 				A PRIMARY KEY is used for securing no dublicates and only allows non null values in the key attribute.\\
 				UNIQUE allows null as a value in its attribute, but dublicates is still nto allowed.\\
 				When creating a table the key can be choosen by after an attribute after its type $PRIMARY\; KEY$ or $UNIQUE$ is inserted or at the end of the table definition $PRIMARY\; KEY\; (a)$ can be inserted where a are the attributes. Again Unique can also be used like this.
-			
-					
+	\section{Algebraic Query Language}
+		The algebraic query langauge is the operation behind the SQL real language.\\
+		This is not a programming language, but the simplicity makes in easier to optimize and faster.\\
+		All the operations works on boths sets and bags(the allowance of mutliple accourences of tuples)\\
+		\begin{table}[h!]
+		\begin{tabular}{|l|l|l|l|}
+		\hline
+		Name       & Symbol               & Effect                                                                                                      & * \\ \hline
+		Union      & $R\cup S$            & All tuples from R and S                                                                                     & 1           \\ \hline
+		Intersect  & $R\cap S$            & Tuples which are in both R and S                                                                            & 1           \\ \hline
+		Difference & $R- S$               & Tuples which in R which is not in S                                                                         & 1           \\ \hline
+		Projection & $\pi_{A1,A2}(R)$     & All tuples from R but only attributes $A1$ and $A2$                                                         &             \\ \hline
+		Selection  & $\sigma_C(R)$         & Select tuples from R which meets the condition $C$                                                          &             \\ \hline
+		Cartesian  & $R\times S$          & Every possible combination of tuples from R and S                                                           & 2           \\ \hline
+		Nat. join  & $R\bowtie S$         & \begin{tabular}[c]{@{}l@{}}Cartesian product but only\\ where overlapping attributes are equal\end{tabular} & 2           \\ \hline
+		Theta join & $R\bowtie_CS$        & \begin{tabular}[c]{@{}l@{}}Every cartesian product of R and S\\ which meet the $C$ condition\end{tabular}   & 2           \\ \hline
+		Rename     & $\rho_{S(A1,A2)}(R)$ & All tuples in R but rename attributes to A1 and A2                                                   &             \\ \hline
+		\end{tabular}
+		\end{table}
+		\begin{enumerate}
+			\item Same attributes (and same type) in same order
+			\item In case of attributes with same name they will be "renamed" to 'relationName.Attribute'
+		\end{enumerate}
+		It can here be seen that there is multiple combinations which are equal. Here the highest priority readability due to the query compiler rewriting it anyway.\\
+		When writing linear notation be used as such:
+		$$R(a,y,l):=\sigma_{age<18}(People)$$
+		From which $R$ now can be usedas a variable.\\
+		Often when combining operationsa tree is used where root is the final product and branches are the first operations done.
 \end{document}

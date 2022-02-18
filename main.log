@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.23 (MiKTeX 21.8) (preloaded format=pdflatex 2021.11.24)  15 FEB 2022 04:42
+This is pdfTeX, Version 3.141592653-2.6-1.40.23 (MiKTeX 21.8) (preloaded format=pdflatex 2021.11.24)  18 FEB 2022 06:42
 entering extended mode
 **./main.tex
 (main.tex
@@ -1038,36 +1038,50 @@ LaTeX Font Info:    Font shape `OML/cmr/m/n' in size <12> not available
 (Font)              Font shape `OML/cmm/m/it' tried instead on input line 77.
 
 [4]
-Underfull \hbox (badness 10000) in paragraph at lines 91--95
+Overfull \hbox (25.94928pt too wide) in paragraph at lines 102--103
+[][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 109--113
 
  []
 
 [5]
-Underfull \hbox (badness 10000) in paragraph at lines 112--113
+Underfull \hbox (badness 10000) in paragraph at lines 130--131
 
  []
 
-[6] (main.aux)
+[6]
+Overfull \hbox (45.88168pt too wide) in paragraph at lines 140--153
+[][] 
+ []
+
+[7] (main.aux)
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 9B7C188D8B42D6F467814EDA49EB8D19;1280.
+(rerunfilecheck)             Checksum: 490B9323D31863AE81161A7DD34EECA9;1666.
  ) 
 Here is how much of TeX's memory you used:
- 27506 strings out of 478927
- 500797 string characters out of 2850602
- 1008317 words of memory out of 3000000
- 44838 multiletter control sequences out of 15000+600000
+ 27539 strings out of 478927
+ 501213 string characters out of 2850602
+ 1019317 words of memory out of 3000000
+ 44854 multiletter control sequences out of 15000+600000
  412530 words of font info for 62 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 106i,6n,108p,461b,1831s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 106i,16n,108p,461b,1831s stack positions out of 5000i,500n,10000p,200000b,80000s
  <C:\Users\Main User\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\
 tcrm1200.pk><C:/Users/Main User/AppData/Local/Programs/MiKTeX/fonts/type1/publi
 c/amsfonts/cm/cmbx12.pfb><C:/Users/Main User/AppData/Local/Programs/MiKTeX/font
 s/type1/public/amsfonts/cm/cmmi12.pfb><C:/Users/Main User/AppData/Local/Program
-s/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/Main User/AppData/L
-ocal/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr17.pfb>
-Output written on main.pdf (6 pages, 84678 bytes).
+s/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Users/Main User/AppData/L
+ocal/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/Main Us
+er/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr17.pfb><C:/U
+sers/Main User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr
+8.pfb><C:/Users/Main User/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsf
+onts/cm/cmsy10.pfb>
+Output written on main.pdf (7 pages, 127140 bytes).
 PDF statistics:
- 119 PDF objects out of 1000 (max. 8388607)
- 29 named destinations out of 1000 (max. 500000)
- 77 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 170 PDF objects out of 1000 (max. 8388607)
+ 46 named destinations out of 1000 (max. 500000)
+ 93 words of extra memory for PDF output out of 10000 (max. 10000000)
 

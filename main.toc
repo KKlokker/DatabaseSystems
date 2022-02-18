@@ -3,6 +3,8 @@
 \contentsline {subsection}{\numberline {1.2}Transaction manager}{4}{subsection.1.2}%
 \contentsline {section}{\numberline {2}The relational model of data}{4}{section.2}%
 \contentsline {subsection}{\numberline {2.1}The semistructured-data model}{4}{subsection.2.1}%
-\contentsline {subsection}{\numberline {2.2}The basics of relational database}{5}{subsection.2.2}%
-\contentsline {subsection}{\numberline {2.3}SQL language}{5}{subsection.2.3}%
-\contentsline {subsubsection}{\numberline {2.3.1}Keys}{6}{subsubsection.2.3.1}%
+\contentsline {subsection}{\numberline {2.2}Document Type Definition model}{5}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}The basics of relational database}{5}{subsection.2.3}%
+\contentsline {subsection}{\numberline {2.4}SQL language}{6}{subsection.2.4}%
+\contentsline {subsubsection}{\numberline {2.4.1}Keys}{6}{subsubsection.2.4.1}%
+\contentsline {section}{\numberline {3}Algebraic Query Language}{7}{section.3}%
