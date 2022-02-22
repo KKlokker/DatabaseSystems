@@ -94,6 +94,100 @@
 					ALTER TABKE Printer DROP color 
 				\subsubsection{Add an $od$ attribute for PC, which defaults to none an otherwise can be cd or dvd}
 					ALTER TABLE PC ADD VARCHAR[20] od DEFAULT 'none'
+		\section{Uge}
+			\subsection{Working with linear notation}
+				The following exercises uses the following schema:\\
+				$Product(maker, model, type)$\\
+				$PC(model, speed,ram, hd, price)$\\
+				$Laptop(model, speed, ram, hd ,screen, price)$\\
+				$Printer(model, color, type, price)$
+				\subsubsection{PC models which have speed of at least 3.00?}
+					$\pi_{model}(\sigma_{speed > 3.00}(PC))$
+				\subsubsection{PC manufacturers which makes PC with a hdd with at leat 100GB}
+					$\pi_{maker}(Product \bowtie \sigma_{hd >= 100}(PC))$
+				\subsubsection{Find model and price of all products made by manufacturer $B$}
+					\begin{align*}
+						man &:= \sigma_{maker = B}(Product)\\
+						PCModelPrice &:= \pi_{model, price}(man \bowtie PC)\\
+						LaptopModelPrice &:= \pi_{model, price}(man \bowtie Laptop)\\
+						PrinterModelPrice &:= \pi_{model, price}(man \bowtie Printer)\\
+						modPrice &:= PCModelPrice \cup LaptopModelPrice \cup PrinterModelPrice
+					\end{align*}
+				\subsubsection{Find model numbers of all color laster printers}
+					$\pi_{model}(Product \bowtie \sigma_{color = 1 AND type = laser}(Printer))$
+				\subsubsection{Find manufactures that sell Laptops but not PC}
+					Due to algebra not including a method for group by I have answered in form of SQL queries.\\
+					SELECT (SELECT maker FROM LAPTOP NATURAL JOIN Product GROUP BY maker)  -  (SELECT maker FROM PC NATURAL JOIN Product GROUP BY maker)
+				\subsubsection{Find hd size which accour in two or more PC's}
+					\begin{align*}
+						PC = \pi_{model,hd}(PC)\\
+						PC2(model2,hd) = \pi_{model,hd}(PC)\\
+						hd = \pi_{hd}(\sigma_{model != model}(PC \bowtie PC2)
+					\end{align*}
+			\clearpage
+			\subsection{In the following data, what is the result of $\pi_{speed}(PC)$ when treated as a bag and set}
+				\begin{table}[h!]
+				\begin{tabular}{|l|l|l|l|l|}
+				\hline
+				model & speed &ram &hd &price  \\\hline
+				1001 &2.66 &1024 &250 &2114 \\\hline
+				1002 &2.10 & 512 &250 &995   \\\hline
+				1003 &1.42 & 512 & 80 &478      \\\hline
+				1004 &2.80 &1024 &250 &649    \\\hline
+				1005 &3.20 &512 &250 &630     \\\hline
+				1006 &3.20 &1024 &320 &1049   \\\hline
+				1007 &2.20 & 1024 &200 &510  \\\hline
+				1008 &2.20 &2048 &250 &770  \\\hline
+				1009 &2.00 &1024 &250 &650  \\\hline
+				1010 &2.80 &2048 &300 &770    \\\hline
+				1011 &1.86 &2048 &160 &959  \\\hline
+				1012 &2.80 &1024 &160 &649    \\\hline
+				1013 &3.06 &512 &80 &529     \\\hline
+				\end{tabular}
+				\end{table}
+				\begin{minipage}[t]{0.5\textwidth}
+				\begin{center}
+				Bag\\
+				\begin{tabular}{|l|}
+				\hline
+				speed\\\hline
+				2.66 \\\hline
+				2.10 \\\hline
+				1.42 \\\hline
+				2.80 \\\hline
+				3.20 \\\hline
+				3.20 \\\hline
+				2.20 \\\hline
+				2.20 \\\hline
+				2.00 \\\hline
+				2.80 \\\hline
+				1.86 \\\hline
+				2.80 \\\hline
+				3.06 \\\hline
+				\end{tabular}
+				\end{center}
+				\end{minipage}
+				\begin{minipage}[t]{0.5\textwidth}
+				\begin{center}
+				Set\\
+				\begin{tabular}{|l|}
+				\hline
+				speed\\\hline
+				2.66 \\\hline
+				2.10 \\\hline
+				1.42 \\\hline
+				2.80 \\\hline
+				3.20 \\\hline
+				2.20 \\\hline
+				2.00 \\\hline
+				2.80 \\\hline
+				1.86 \\\hline
+				3.06 \\\hline
+				\end{tabular}
+				\end{center}
+				\end{minipage}
+					
+			
 					
 				
 			

@@ -136,19 +136,20 @@
 		The algebraic query langauge is the operation behind the SQL real language.\\
 		This is not a programming language, but the simplicity makes in easier to optimize and faster.\\
 		All the operations works on boths sets and bags(the allowance of mutliple accourences of tuples)\\
+		The following table is in precedence order from first at top and last on bottom.\\
 		\begin{table}[h!]
 		\begin{tabular}{|l|l|l|l|}
 		\hline
 		Name       & Symbol               & Effect                                                                                                      & * \\ \hline
-		Union      & $R\cup S$            & All tuples from R and S                                                                                     & 1           \\ \hline
-		Intersect  & $R\cap S$            & Tuples which are in both R and S                                                                            & 1           \\ \hline
-		Difference & $R- S$               & Tuples which in R which is not in S                                                                         & 1           \\ \hline
-		Projection & $\pi_{A1,A2}(R)$     & All tuples from R but only attributes $A1$ and $A2$                                                         &             \\ \hline
 		Selection  & $\sigma_C(R)$         & Select tuples from R which meets the condition $C$                                                          &             \\ \hline
+		Projection & $\pi_{A1,A2}(R)$     & All tuples from R but only attributes $A1$ and $A2$                                                         &             \\ \hline
+		Rename     & $\rho_{S(A1,A2)}(R)$ & \begin{tabular}[c]{@{}l@{}}All tuples in R but rename attributes to A1 and A2\\ Alternative $R2_{A1,A2}:=R$\end{tabular}   & \\ \hline
 		Cartesian  & $R\times S$          & Every possible combination of tuples from R and S                                                           & 2           \\ \hline
 		Nat. join  & $R\bowtie S$         & \begin{tabular}[c]{@{}l@{}}Cartesian product but only\\ where overlapping attributes are equal\end{tabular} & 2           \\ \hline
 		Theta join & $R\bowtie_CS$        & \begin{tabular}[c]{@{}l@{}}Every cartesian product of R and S\\ which meet the $C$ condition\end{tabular}   & 2           \\ \hline
-		Rename     & $\rho_{S(A1,A2)}(R)$ & All tuples in R but rename attributes to A1 and A2                                                   &             \\ \hline
+		Difference & $R- S$               & Tuples which in R which is not in S                                                                         & 1           \\ \hline		
+		Union      & $R\cup S$            & All tuples from R and S                                                                                     & 1           \\ \hline
+		Intersect  & $R\cap S$            & Tuples which are in both R and S                                                                            & 1           \\ \hline
 		\end{tabular}
 		\end{table}
 		\begin{enumerate}
@@ -160,4 +161,103 @@
 		$$R(a,y,l):=\sigma_{age<18}(People)$$
 		From which $R$ now can be usedas a variable.\\
 		Often when combining operationsa tree is used where root is the final product and branches are the first operations done.
+		\subsection{Examples}
+			\begin{minipage}[t]{0.32\textwidth}
+				\begin{center}
+				$A$\\
+				\begin{tabular}{|l|l|}
+				\hline
+				A & B \\ \hline
+				1 & 5 \\ \hline
+				2 & 4 \\ \hline
+				\end{tabular}\\[4mm]
+				$A\cup C$\\
+				\begin{tabular}{|l|l|}
+				\hline
+				A & B \\ \hline
+				1 & 5 \\ \hline
+				2 & 4 \\ \hline
+				1 & 5 \\ \hline
+				7 & 0 \\ \hline
+				\end{tabular}\\[4mm]
+				$\sigma_{B<4}(C)$\\
+				\begin{tabular}{|l|l|}
+				\hline
+				A & B \\ \hline
+				7 & 0 \\ \hline
+				\end{tabular}\\[4mm]
+				$A\bowtie B$\\
+				\begin{tabular}{|l|l|l|}
+				\hline
+				 A & B & C \\ \hline
+				 1 & 5 & 8 \\ \hline
+				 2 & 4 & 9 \\ \hline
+				\end{tabular}
+				
+				\end{center}
+			\end{minipage}
+			\begin{minipage}[t]{0.32\textwidth}
+				\begin{center}
+				$B$\\
+				\begin{tabular}{|l|l|}
+				\hline
+				B & C \\ \hline
+				5 & 8 \\ \hline
+				4 & 9 \\ \hline
+				\end{tabular}\\[4mm]
+				$A\cap C$\\
+				\begin{tabular}{|l|l|}
+				\hline
+				A & B \\ \hline
+				1 & 5 \\ \hline
+				\end{tabular}\\[4mm]
+				$\pi_B(A)$\\
+				\begin{tabular}{|l|}
+				\hline
+				 B \\ \hline
+				 5 \\ \hline
+				 4 \\ \hline
+				\end{tabular}\\[4mm]
+				$A\bowtie_{A.B = B.B}C$\\
+				\begin{tabular}{|l|l|l|l|}
+				\hline
+				A & A.B & B.B & C \\ \hline
+				1 & 5 & 5 & 8\\ \hline
+				2 & 4 & 4 & 9\\ \hline
+				\end{tabular}
+				\end{center}				
+			\end{minipage}
+			\begin{minipage}[t]{0.32\textwidth}
+				\begin{center}
+				$C$\\
+				\begin{tabular}{|l|l|}
+				\hline
+				A & B \\ \hline
+				1 & 5 \\ \hline
+				7 & 0 \\ \hline
+				\end{tabular}\\[4mm]
+				$A- C$\\
+				\begin{tabular}{|l|l|}
+				\hline
+				A & B \\ \hline
+				2 & 4 \\ \hline
+				\end{tabular}\\[4mm]
+				$A\times B$\\
+				\begin{tabular}{|l|l|l|l|}
+				\hline
+				A & A.B & B.B & C \\ \hline
+				1 & 5 & 5 & 8\\ \hline
+				1 & 5 & 4 & 9\\ \hline
+				2 & 4 & 5 & 8\\ \hline
+				2 & 4 & 4 & 9\\ \hline
+				\end{tabular}\\[4mm]
+				$\rho_{G,K}(A)$\\
+				\begin{tabular}{|l|l|}
+				\hline
+				G & K \\ \hline
+				1 & 5 \\ \hline
+				2 & 4 \\ \hline
+				\end{tabular}
+				\end{center}				
+			\end{minipage}
 \end{document}
