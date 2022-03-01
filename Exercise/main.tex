@@ -122,8 +122,55 @@
 					\begin{align*}
 						PC = \pi_{model,hd}(PC)\\
 						PC2(model2,hd) = \pi_{model,hd}(PC)\\
-						hd = \pi_{hd}(\sigma_{model != model}(PC \bowtie PC2)
+						hd = \pi_{hd}(\sigma_{model != model2}(PC \bowtie PC2)
 					\end{align*}
+				\subsubsection{Find PC models which have the same speed and RAM, a pair should only be listed once}
+					\begin{align*}
+						Model1 = \pi_{model,speed,RAM}(PC)\\
+						Model2(model2,speed,RAM) = \pi_{model,speed,RAM}(PC)\\
+						models = \pi_{model,model2}(\sigma_{model != model2}(PC \bowtie PC2)
+ 					\end{align*}			
+				\subsubsection{Find PC models which have the same speed and RAM, a pair should only be listed once}
+					\begin{align*}
+						ModelPC = \pi_{model}\sigma_{speed >= 2.8}(PC)\\
+						ModelLaptop = \pi_{model}\sigma_{speed >= 2.8}(Laptop)\\
+						models = ModelPC \cup ModelLaptop\\
+						mans = \pi_{maker,model}(models \bowtie Product)\\
+						twoProduct = \sigma_{maker2 = maker and model2 != model}(\rho_{maker2,model2}mans \times mans)
+ 					\end{align*}			
+				\subsubsection{Find manufactore(s) of the fastest PC or laptop}
+					\begin{align*}
+						computers = \pi_{model,speed}Laptop \cup PC\\
+						computers2(model2, speed2) = computers\\
+						slowSpeed = \pi_{speed}(computers\bowtie_{speed<speed2} computers2)\\
+						fastSpeed(fast) = \pi_{speed}(computers)-slowSpeed\\
+						fastModels = computers \bowtie_{speed=fast} fastSpeed\\
+						mans = \pi_{maker}(fastModels \bowtie Product)
+ 					\end{align*}	
+				\subsubsection{Find manufactores who sellf at lest three PC's}
+					\begin{align*}
+						model = \rho_{model}PC\\
+						computers = model \times model(model2) \times model(model3)\\
+						models = \sigma_{model = model2 and model2 = model3}(computers)\\
+						mans = \pi_{maker}(models \bowtie Product)
+ 					\end{align*}		
+				\subsubsection{Find manufactores who sell atleast 3 different speed PC's}
+					\begin{align*}
+						model = \rho_{model}PC\\
+						computers = model \times model(model2) \times model(model3)\\
+						models = \sigma_{model = model2 and model2 = model3}(computers)\\
+						mans = \pi_{maker}((models \bowtie Product)
+ 					\end{align*}	
+				\subsubsection{Find manufactores who sell exactly three PC's}
+					\begin{align*}
+						model = \rho_{model}PC\\
+						computers = model \times model(model2) \times model(model3)\\
+						models = \sigma_{model = model2 and model2 = model3}(computers)\\
+						TooManycomputers = model \times model(model2) \times model(model3) \times model(model4)\\
+						models = \sigma_{model = model2 and model2 = model3}(computers)\\
+						TooManymodels = \sigma_{model = model2 and model2 = model3 and model3 = model4}(computers)\\
+						mans = \pi_{maker}((models \bowtie Product)
+ 					\end{align*}											
 			\clearpage
 			\subsection{In the following data, what is the result of $\pi_{speed}(PC)$ when treated as a bag and set}
 				\begin{table}[h!]
@@ -186,8 +233,67 @@
 				\end{tabular}
 				\end{center}
 				\end{minipage}
-					
+	\section{Week}
+		\subsection{In the query SELECT A B is b an attribute or alias}
+			B will be an alias for it to be an attribute A and B has to be comma seperated.
+		\subsection{Write the following queries based on the following tables}
+			Movies(title , year, length, genre, studioName, producerC$\#$)\\
+			StarsIn(movie Title , movieYear, starName)\\
+			MovieStar(name, address, gender, birthdate )\\
+			MovieExec(name, address, cert$\#$ , netWorth)\\
+			Studio(name, address , presC$\#$)
+			\subsubsection{Find the address of MGM studios}
+				SELECT address FROM Studio WHERE name = 'MGM'
+			\subsubsection{Find Sandra Bullock's birthday}
+				SELECT birthdate FROM MovieStar WHERE name = 'Sandra Bullock'
+			\subsubsection{Find all the stars that appeared either in a movie made in 1980 or a movie with Love in the title}
+				SELECT Star.name FROM MovieStar Star WHERE Star.name IN (SELECT starName FROM StarsIn, Movies WHERE MovieTitle = title AND (Movies.title LIKE $\%$Love$\%$' OR Movies.year = 1980))
+			\subsubsection{Find all executive worth at least \$10,000,000}
+				SELECT name FROM MovieExec WHERE netWorth $>$ 10000000
+			\subsubsection{Find all the stars who either are male or live in Malibu}
+				SELECT name FROM MovieStar WHERE gender = 'male' OR address LIKE '$\%$Malibu$\%$'  
+			\subsubsection{Who were the male stars in $Titanic$}
+				SELECT name FROM Movies, StarsIn, MovieStar WHERE title = 'Titanic' AND title = movieTitle AND starName = name AND gender = male
+			\subsubsection{Which stars appeared in movies produced by MGM in 1995}
+				SELECT starName FROM Movies, StarsIn WHERE studioName = 'MGM' AND title = movieTitle
+			\subsubsection{Who is the presiden of MGM Studios}
+				SELECT MovieExec.name FROM Studio, MovieExec WHERE Studio.name = 'MGM' AND presC$\#$ = cert$\#$
+			\subsubsection{Which movies are longer than $Gone with the Wind$}
+				SELECT title FROM Movies WHERE length $>$ (SELECT length FROM MOVIES WHERE title = 'Gone with the Wind')
+			\subsubsection{Which executive are worth more than Merv Griffin}
+				SELECT name FROM MovieExec WHERE netWorth $>$ (SELECT netWorth FROM MovieExec WHERE name = 'Merv Griffin')
+		\subsection{Describe possible values for a and b in the following conditions to be true}
+			\subsubsection{a = 10 OR b = 20}
+				a is 10, b can be anything including null, and the otherway around
+			\subsubsection{a = 10 AND b = 20}
+				Both a has to be 10 and b has to be 20
+			\subsubsection{a $<$ 10 OR a $>$= 10}
+				One of the statements has to be true where the other can both be UNKNOWN by being null or just FALSE be being 11 or higher ot just TRUE.
+			\subsubsection{a = b}
+				This will only be true if both have the same value, in case of null it will return UNKNOWN
+			\subsubsection{a $<=$ b}
+				If b is higher than a or equal to a it will return true. If one them is null it will be UNKNOWN an otherwise it will be false.
+		\subsection{Write the following queries based on the following tables}
+			Product(maker, model, type)\\
+			PC(model, speed, ram, hd, price)\\
+			Laptop(model, speed, ram, hd, screen, price)\\
+			Printer(model, color, type, price)\\
+			\subsubsection{Find the makers of PC's with a speed of at least 3.0}
+				SELECT model FROM PC WHERE speed $>$ 3.0
+			\subsubsection{Find the printers with the highest price}
+				SELECT model FROM Printer WHERE price = (SELECT MAX(price) FROM Printer)
+			\subsubsection{Find the laptops whose speed is slower than that of any PC}
+				SELECT model FROM Laptop WHERE speed < (SELECT MIN(speed) FROM PC)
+			\subsubsection{Find the model number of the item (PC, Laptop, Printer) with the highest price}
+				SELECT model FROM \\
+					(SELECT model, price FROM PC UNION SELECT model,price FROM Laptop UNION SELECT model,price FROM Printer) \\
+					WHERE price = SELECT MAX(price) FROM \\
+						(SELECT MAX(price) FROM PC) UNION (SELECT MAX(price) FROM Laptop) UNION  (SELECT MAX(price) FROM Printer)) 
+			\subsubsection{Find the maker of the color printer with lowest price}
+				SELECT model FROM Printer WHERE type=color AND price = (SELECT MIN(price) FROM Printer)
 			
+				
+				
 					
 				
 			

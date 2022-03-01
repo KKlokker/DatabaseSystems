@@ -260,4 +260,86 @@
 				\end{tabular}
 				\end{center}				
 			\end{minipage}
+	\section{Queries in SQL}
+		\subsection{Select}
+			The most simple query is the SELECT FROM WHERE.\\
+			This a simple select query which selects attributes from a database where a conditions is met.\\
+			The conditions can use the 6 comparisions operators: $=,<>,<,>,<=,>=$ where $<>$ is not equal.\\
+			Operations may also be done on values for int $+,-,*,/,\%$ and for string $||$ which adds two string together.\\
+			When comparing string the $<$ operators are defined upon lexicongraphic order.\\
+			For string the LIKE can be used to match a pattern. A pattern uses $\%$ and $\_$ where $\%$ is any number of wildcard charachters and $\_$ is a single charachter.\\
+			Strings are defined by ' therefore when working with them inside a string two ' is used like ''\\
+			Logic operators avaliable is AND, OR and NOT\\
+			Ex. SELECT title, genre FROM Books WHERE author = Kristoffer Klokker AND year = 2022\\
+		\subsection{Rename}
+			In case of a rename of attributes the keywords AS is used, here it is also possible to modify values.\\
+			Ex. SELECT title + ' and the stone' AS name from Books\\
+			COnstants are also avaliable if wanted.\\
+			Ex. SELECT title || ' and the stone' AS name, 'forever' AS readTime from Books\\
+		\subsection{Date and time}
+			Dates are defined as: DATE 'year-month-day' Ex: DATE '2022-12-04'\\
+			Times are defined as: TIME 'hour:minut:second' Ex: TIME '19:42:12.55'\\
+			In case of timezones TIME 'hour:minut:second-hour:minut' this will be the amount of hours and minuts behind GMT. The minus could also be a plus.\\
+			Timestamps are used to combine date and time.\\
+			Timestamps are defined as 'TIMESTAMP 'year-month-day hour:minut:second'\\
+			These values can of course be compared both with equal and all the $<$ as expected.
+		\subsection{Working with null}
+			A sql entry may be null due to: not knowing the value, no value really match the attribute or the value is withheld.\\
+			This can have consequence in the query condition.\\
+			When using any math operations on null it becomes null.\\
+			When comparing anything to null it becomes UNKNOWN.\\
+			To check if a value is null the IS NULL is used.\\
+			In the opearation 'UNKNOWN AND x' the statement is false when x is false and UNKNOWN when x is true.\\
+			In the operation 'UNKNOWN OR x' the statement is true when x is true and UNKNOWN when x us false.\\
+			When negating UNKNOWN the value is UNKNOWN.\\
+			UNKNOWN values will not interpretated as true and queries where the condition result in UNKNOWN will not show up.\\
+		\subsection{Ordering}
+			To order the output of a qeruy the ORDER BY <attributes> is used.\\
+			After the attributes list DESC can be added for a descending list whereas ASC is not needed due to ascending being the default.\\
+			Multiple attributes are used in case of a the first attribute being equal then the second attribute is used for ordering.
+		\subsection{Multiple tables}
+			When working with multiple tables the FROM can be filled up with multiple tables.\\
+			Ex. SELECT title, age FROM Books CoolPeople WHERE author = name\\
+			In case of the table having the same name or the same table being used an alias can be created by a space after the table followed by the wanted name.\\
+			Ex. SELECT Book1.name, Book2.name FROM Books Book1, Books Book2 WHERE Book1.title = Book2.title AND Book1.name <> Book2.name\\
+		\subsection{Union, intersect and except}
+			The relational algebra operation can be used on two SELECT statement to get the expected output.\\
+			Ex. SELECT name FROM Books INTERSECT SELECT name FROM CoolPeople\\
+			For union and except intersect is replaced with UNION or EXCEPT.\\
+			These operations will eliminate dublicates to prevent this the ALL keyword can be used. Ex. SELECT name FROM Books INTERSECT ALL SELECT name FROM CoolPeople\\
+		\subsection{Join}
+			The simplest join is the CROSS join also known as cartesian product Ex. Books CROSS JOIN CoolPeople\\
+			Theta joing the cross product but with a condition is done like cross but with ON and then condition Ex. Books JOIN CoolPeople ON author = name\\
+			Natural join where attributes are matched is done by taking the two tables with NATURAL JOIN between Ex. CoolPeople NATRUAL JOIN SmartPeople\\
+			Outher join is like natural join except instead of throwing away non matching entries they are filled with null Ex. CoolPople NATURAL FULL OUTER JOIN SmartPeople. \\
+			This will include all entries from SmartPeople and CoolPeople but if an entry only exists in one the attributes from the other table is fileld with null.\\
+			Variant of LEFT and RIGHT also where left only includes all entries from the left table and only matching from the right Ex. CoolPeople NATURAL LEFT OUTER JOIN SmartPeople.\\
+		 \subsection{Subqueries}
+		 	Subqueries are used for getting a value from a table which then is most often used in a comapre statement or as a table the selection is taken from.\\
+		 	If a subquery only return one value it is called scalar and can be used in an condition.\\
+		 	Ex SELECT title FROM Books Where author = (SELECT name FROM CoolPeople WHERE key = 3)\\
+		 	In case a subquery return multiple result the following operators can be used:
+		 	\begin{itemize}
+		 		\item EXISTS R - return true if R is not empty
+		 		\item s IN R - return true if s is an entry in R
+		 		\item s ($>$) ALL R - returns true if the math operation here $>$ is true for all entried in R
+		 		\item s ($>$) ANY R - returns true if the math operation here $>$ is true for any entru in R
+			\end{itemize}
+			All the operators can ofcourse be negated by puttin NOT infront.
+		\subsection{Sets}
+			To get a set in a query the DISTINCT is used after the SELECT Ex. SELECT DISTINCT names FROM...\\
+		\subsection{Aggregation operations}
+			This is operations which is done on the while selection.\\
+			These operations include: SUM, AVG, MIN, MAX and COUNT.\\
+			Ex. SELECT AVG(age) FROM CoolPeople\\
+			In case of wanting only sets DISTINCT is used as follow SELECT SUM(DISTINCT age) FROM CoolPeople.\\
+			GROUP BY is often here used to get the aggregation to a given group.
+			Ex. SELECT name, SUM(age) FROM CoolPeople GROUP BY name.\\
+			This will give the age sum for each name in cool people.\\
+			NULL is ignored when calcilation an aggregation but a group can be in NULL.\\
+			THE GROUP BY can also works as a condition with the keyword HAVING.\\
+			Ex. SELECT name, SUM(age) FROM CoolPeople GROUP BY name HAVING MIN(age) $>$ 18\\
+			This will return the names and the sum of ages with the same name but only people over 18 count.
+			
+		
 \end{document}
