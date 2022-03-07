@@ -24,7 +24,7 @@
 	\tableofcontents
 	\clearpage
 		\setcounter{section}{5}
-		\section{Uge}
+		\section{Week}
 			\subsection{Indicate the following according to figure 1.}
 				\begin{figure}[h!]
 					\centering
@@ -94,7 +94,7 @@
 					ALTER TABKE Printer DROP color 
 				\subsubsection{Add an $od$ attribute for PC, which defaults to none an otherwise can be cd or dvd}
 					ALTER TABLE PC ADD VARCHAR[20] od DEFAULT 'none'
-		\section{Uge}
+		\section{Week}
 			\subsection{Working with linear notation}
 				The following exercises uses the following schema:\\
 				$Product(maker, model, type)$\\
@@ -114,7 +114,7 @@
 						modPrice &:= PCModelPrice \cup LaptopModelPrice \cup PrinterModelPrice
 					\end{align*}
 				\subsubsection{Find model numbers of all color laster printers}
-					$\pi_{model}(Product \bowtie \sigma_{color = 1 AND type = laser}(Printer))$
+					$\pi_{model}(\sigma_{color = 1 AND type = laser}(Printer))$
 				\subsubsection{Find manufactures that sell Laptops but not PC}
 					Due to algebra not including a method for group by I have answered in form of SQL queries.\\
 					SELECT (SELECT maker FROM LAPTOP NATURAL JOIN Product GROUP BY maker)  -  (SELECT maker FROM PC NATURAL JOIN Product GROUP BY maker)
@@ -291,6 +291,34 @@
 						(SELECT MAX(price) FROM PC) UNION (SELECT MAX(price) FROM Laptop) UNION  (SELECT MAX(price) FROM Printer)) 
 			\subsubsection{Find the maker of the color printer with lowest price}
 				SELECT model FROM Printer WHERE type=color AND price = (SELECT MIN(price) FROM Printer)
+	\section{Week}
+		\subsection{Write SQL queries for the following database}
+			$Product(maker, model, type)$\\
+			$PC(model, speed,ram, hd, price)$\\
+			$Laptop(model, speed, ram, hd ,screen, price)$\\
+			$Printer(model, color, type, price)$
+			\subsubsection{What PC models have a speed grater than 3}
+				SELECT * FROM PC WHERE speed $>$ 3
+			\subsubsection{Find model and price for all products made by manufacturer B}
+				SELECT price, model FROM PC, Laptop, Printer Where model EXISTS (SELECT model FROM product WHERE maker = B)
+			\subsubsection{Find manufactureres of at least two different computers with speed grather than 2.8}
+				SELECT maker FROM (SELECT maker FROM Product WHERE model EXIST (SELECT models FROM PC, Laptop Where speed $>$ 2.8)) WHERE COUNT(maker) $>$= 2		
+			\subsubsection{Find the average speed of PC's}
+				SELECT AVG(speed) FROM PC
+			\subsubsection{Find the average speed of laptops costing over \$1000}
+				SELECT * FROM Laptops WHERE price $>$ 1000
+			\subsubsection{Find the average price of PC's and Laptops made by manufacturer "D"}
+				SELECT AVG(price) FROM Laptop, PC WHERE model EXIST (SELECT model FROM Product WHERE maker = 'D')
+			\subsubsection{Find for each different speed, the average price of a PC}
+				SELECT AVG(price) FROM PC GROUP BY speed
+			\subsubsection{Find for each manufacturer the average screen size of its laptops}
+				SELECT AVG(screen) FROM PC NATURAL JOING Product GROUP BY maker
+			\subsubsection{Find the manufacturers that make at least three different model of PC}
+				SELECT maker FROM PC NATURAL JOIN Product GROUP BY maker HAVING COUNT(*) $>$ 2
+			\subsubsection{Find for each manufacturer who selss PC's the maximum price of a PC.}
+				SELECT MAX(price) FROM PC NATURAL JOIN Product GROUP BY maker
+			\subsubsection{Find for each speed of PC above 2.0 the average price}
+				SELECT AVG(price) FROM PC GROUP BY speed HAVING speed $>$ 2
 			
 				
 				

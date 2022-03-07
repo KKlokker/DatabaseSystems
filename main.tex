@@ -24,6 +24,13 @@
   morekeywords={encoding,
     xs:schema,xs:element,xs:complexType,xs:sequence,xs:attribute}
 }
+
+
+\def\ojoin{\setbox0=\hbox{$\bowtie$}%
+  \rule[-.02ex]{.25em}{.4pt}\llap{\rule[\ht0]{.25em}{.4pt}}}
+\def\leftouterjoin{\mathbin{\ojoin\mkern-5.8mu\bowtie}}
+\def\rightouterjoin{\mathbin{\bowtie\mkern-5.8mu\ojoin}}
+\def\fullouterjoin{\mathbin{\ojoin\mkern-5.8mu\bowtie\mkern-5.8mu\ojoin}}
 \begin{document}
 	\maketitle
 	\clearpage
@@ -142,11 +149,16 @@
 		\hline
 		Name       & Symbol               & Effect                                                                                                      & * \\ \hline
 		Selection  & $\sigma_C(R)$         & Select tuples from R which meets the condition $C$                                                          &             \\ \hline
-		Projection & $\pi_{A1,A2}(R)$     & All tuples from R but only attributes $A1$ and $A2$                                                         &             \\ \hline
+		Projection & $\pi_{A1,A2}(R)$     & All tuples from R but only attributes $A1$ and $A2$                                                         &        4     \\ \hline
 		Rename     & $\rho_{S(A1,A2)}(R)$ & \begin{tabular}[c]{@{}l@{}}All tuples in R but rename attributes to A1 and A2\\ Alternative $R2_{A1,A2}:=R$\end{tabular}   & \\ \hline
+		Duplicate Elem.  & $\delta (R)$            & Eliminate dublicate tubles in relation R                                                                            &            \\ \hline
+		Aggregation  & Ex. $SUM(B)$            & Computes operation on given attribute B                                                                           &         3   \\ \hline
+		Group  & $\gamma_{B,SUM(C)\rightarrow s}R $   &\begin{tabular}[c]{@{}l@{}}Group relation R by attribute B and in this\\ example creates attribute s with the sum of\\ attribute C to each goup\end{tabular}                                                &            \\ \hline
+		Sort  & $\tau_{A1,A2}(R) $   &Sort relation R according to A1 and A2 &            \\ \hline
 		Cartesian  & $R\times S$          & Every possible combination of tuples from R and S                                                           & 2           \\ \hline
 		Nat. join  & $R\bowtie S$         & \begin{tabular}[c]{@{}l@{}}Cartesian product but only\\ where overlapping attributes are equal\end{tabular} & 2           \\ \hline
 		Theta join & $R\bowtie_CS$        & \begin{tabular}[c]{@{}l@{}}Every cartesian product of R and S\\ which meet the $C$ condition\end{tabular}   & 2           \\ \hline
+		Outer join & $R \fullouterjoin S$ & \begin{tabular}[c]{@{}l@{}}Nat. join but none joined tubles, are padded\\ with NULL/$\bot$. Also in variations\\ of $\leftouterjoin$ where only all tubles from R is kept,\\ and $\rightouterjoin$ which keep all from S \end{tabular}  &            \\ \hline
 		Difference & $R- S$               & Tuples which in R which is not in S                                                                         & 1           \\ \hline		
 		Union      & $R\cup S$            & All tuples from R and S                                                                                     & 1           \\ \hline
 		Intersect  & $R\cap S$            & Tuples which are in both R and S                                                                            & 1           \\ \hline
@@ -155,6 +167,8 @@
 		\begin{enumerate}
 			\item Same attributes (and same type) in same order
 			\item In case of attributes with same name they will be "renamed" to 'relationName.Attribute'
+			\item The standard aggreagation operations are: SUM,AVG,MIN,MAX,COUNT
+			\item Attribute A1 can also be 'A1 $rightarrow$ k' for renaming it to, or some expression like 'A1 + A2 $\rightarrow$ sum'
 		\end{enumerate}
 		It can here be seen that there is multiple combinations which are equal. Here the highest priority readability due to the query compiler rewriting it anyway.\\
 		When writing linear notation be used as such:
@@ -271,6 +285,22 @@
 			Strings are defined by ' therefore when working with them inside a string two ' is used like ''\\
 			Logic operators avaliable is AND, OR and NOT\\
 			Ex. SELECT title, genre FROM Books WHERE author = Kristoffer Klokker AND year = 2022\\
+		\subsection{Default}
+			When creating a realtion, the default attribute can be used in case of a not given value.\\
+			CREATE TABLE CoolPeople(name CHAR(30) DEFAULT 'Kristoffer Klokker', phone CHAR(16));
+		\subsection{Modifying the database}
+			\subsubsection{Insert}
+				INSERT INTO R VALUES (A1,A2..)\\
+				Insert a tuble into relation R with values A1, A2 as the attributes in same order.\\
+				Alternative INSERT INTO R(Sum,Name) VALUES (A1,A2..), which will insert the value to the corresponding attrubute.\\
+				A1 and A2 can also be a tubles by itself from another DB, for inserting multiple tubles at once.
+			\subsubsection{Deletion}
+				DELETE FROM R WHERE <condition>\\
+				Delete every tuple in relation R which satifies the condition.\\
+				Remember deletion is not a linear process rather all satifiable tuples will be deleted once all are found.
+			\subsection{Update}
+				UPDATE R SET name = 'Kristofer' WHERE <condition>\\
+				Changes attribute value, where the condition is met.
 		\subsection{Rename}
 			In case of a rename of attributes the keywords AS is used, here it is also possible to modify values.\\
 			Ex. SELECT title + ' and the stone' AS name from Books\\
