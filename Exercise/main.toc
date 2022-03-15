@@ -17,3 +17,28 @@
 \contentsline {subsubsection}{\numberline {6.4.c}Write a schema for $Printer$}{6}{subsubsection.6.4.3}%
 \contentsline {subsubsection}{\numberline {6.4.d}Write an alternation for Printer and delete the attribute color}{6}{subsubsection.6.4.4}%
 \contentsline {subsubsection}{\numberline {6.4.e}Add an $od$ attribute for PC, which defaults to none an otherwise can be cd or dvd}{6}{subsubsection.6.4.5}%
+\contentsline {section}{\numberline {7}Uge}{6}{section.7}%
+\contentsline {subsection}{\numberline {7.1}Working with linear notation}{6}{subsection.7.1}%
+\contentsline {subsubsection}{\numberline {7.1.a}PC models which have speed of at least 3.00?}{6}{subsubsection.7.1.1}%
+\contentsline {subsubsection}{\numberline {7.1.b}PC manufacturers which makes PC with a hdd with at leat 100GB}{6}{subsubsection.7.1.2}%
+\contentsline {subsubsection}{\numberline {7.1.c}Find model and price of all products made by manufacturer $B$}{7}{subsubsection.7.1.3}%
+\contentsline {subsubsection}{\numberline {7.1.d}Find model numbers of all color laster printers}{7}{subsubsection.7.1.4}%
+\contentsline {subsubsection}{\numberline {7.1.e}Find manufactures that sell Laptops but not PC}{7}{subsubsection.7.1.5}%
+\contentsline {subsubsection}{\numberline {7.1.f}Find hd size which accour in two or more PC's}{7}{subsubsection.7.1.6}%
+\contentsline {subsection}{\numberline {7.2}In the following data, what is the result of $\pi _{speed}(PC)$ when treated as a bag and set}{8}{subsection.7.2}%
+\contentsline {section}{\numberline {8}Week}{9}{section.8}%
+\contentsline {subsection}{\numberline {8.1}What are the expexted FD's in the following database and what key would it have}{9}{subsection.8.1}%
+\contentsline {subsection}{\numberline {8.2}Consider the relation with schema $R(A,B,C,D)$ and FD's $AB\rightarrow C,C\rightarrow D,D\rightarrow A$}{9}{subsection.8.2}%
+\contentsline {subsubsection}{\numberline {8.2.a}What are all the nontrivial FD's that follow from the given FD's? You should restrict yourself to FD's with single attributes on the rigth side}{9}{subsubsection.8.2.1}%
+\contentsline {subsubsection}{\numberline {8.2.b}What are all the keys of R}{9}{subsubsection.8.2.2}%
+\contentsline {subsubsection}{\numberline {8.2.c}What are all the superkeys for R that is not keys?}{10}{subsubsection.8.2.3}%
+\contentsline {subsection}{\numberline {8.3}Find BCNF violations and decompose the schema}{10}{subsection.8.3}%
+\contentsline {subsubsection}{\numberline {8.3.a}$R(A,B,C,D)$ with $AB\rightarrow C$, $C\rightarrow D$, and $D\rightarrow A$}{10}{subsubsection.8.3.1}%
+\contentsline {subsubsection}{\numberline {8.3.b}$R(A,B,C,D,E)$ and $AB\rightarrow C, DE\rightarrow C, B\rightarrow D$}{10}{subsubsection.8.3.2}%
+\contentsline {subsection}{\numberline {8.4}Perform the chase method on the relations $R(A,B,C),R(B,C,D),R(A,C,E)$ using the given FD's}{10}{subsection.8.4}%
+\contentsline {subsubsection}{\numberline {8.4.a}$B\rightarrow E$ and $CE\rightarrow A$}{10}{subsubsection.8.4.1}%
+\contentsline {subsubsection}{\numberline {8.4.b}$A\rightarrow D, D\rightarrow E$ and $B\rightarrow D$}{11}{subsubsection.8.4.2}%
+\contentsline {subsection}{\numberline {8.5}The following exercise is on the relation $Courses(C,T,H,R,S,G)$}{11}{subsection.8.5}%
+\contentsline {subsubsection}{\numberline {8.5.a}What are all the keys for $Courses$}{11}{subsubsection.8.5.1}%
+\contentsline {subsubsection}{\numberline {8.5.b}Verify that the given FD's are their own minimal basis}{11}{subsubsection.8.5.2}%
+\contentsline {subsubsection}{\numberline {8.5.c}Make the relation into a 3NF and check if any BCNF violation accour}{11}{subsubsection.8.5.3}%

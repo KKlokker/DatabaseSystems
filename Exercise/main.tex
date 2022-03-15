@@ -186,11 +186,98 @@
 				\end{tabular}
 				\end{center}
 				\end{minipage}
-					
-			
-					
+	\section{Week}
+		\subsection{What are the expexted FD's in the following database and what key would it have}
+			\begin{itemize}
+				\item name
+				\item Social Security number
+				\item street address
+				\item city
+				\item state
+				\item ZIP code
+				\item area code
+				\item phone number
+			\end{itemize}
+			Social Security number $\rightarrow$ name,street address, city, state, ZIP code, area code\\
+			phone number $\rightarrow$ name
+			key: Social security number, phone number
+		\subsection{Consider the relation with schema $R(A,B,C,D)$ and FD's $AB\rightarrow C,C\rightarrow D,D\rightarrow A$}
+			\subsubsection{What are all the nontrivial FD's that follow from the given FD's? You should restrict yourself to FD's with single attributes on the rigth side}
+				$AB\rightarrow C$\\
+				$C\rightarrow D$\\
+				$D\rightarrow A$\\
+				$AB\rightarrrow D$\\
+				$C\rightarrow A$
+			\subsubsection{What are all the keys of R}
+				$AB^+=\{C,D\}$\\
+				$C^+=\{A,D\}$\\
+				$D^+=\{A\}$\\
+				$BC^+=\{D,A\}$\\
+				$BD^+=\{A,C\}$\\
+				$AB,BC,DC$
+			\subsubsection{What are all the superkeys for R that is not keys?}
+				$BC,BD$	
+		\subsection{Find BCNF violations and decompose the schema}
+			\subsubsection{$R(A,B,C,D)$ with $AB\rightarrow C$, $C\rightarrow D$, and $D\rightarrow A$}
+				$AB^+=\{C,D,A\}$ - violation.\\
+				$R1=R-AB^++AB=R(A,B)$\\
+				$R2=AB^+=R2(A,C,D)$
+			\subsubsection{$R(A,B,C,D,E)$ and $AB\rightarrow C, DE\rightarrow C, B\rightarrow D$}
+				Starts wit the original relation\\
+				$R(A,B,C,D,E)$\\
+				The table violates $AB\rihtarrow C$\\
+				$AB^+=\{C,D\}$\\
+				$R1=R-AB^+=R(A,B,E)$\\
+				$R2=AB^++AB=R(A,B,C,D)$\\
+				But $R2$ violates $B\rightarrow D$\\
+				$B^+=\{D\}$\\
+				$R3=R2-B^+=R(A,B,C)$\\
+				$R4=B^++B=R(B,D)$\\
+				Therefore the new realtions are $R1,R3,R4$, since none now violates BCNF.
+				\subsection{Perform the chase method on the relations $R(A,B,C),R(B,C,D),R(A,C,E)$ using the given FD's}
+					\subsubsection{$B\rightarrow E$ and $CE\rightarrow A$}
+						$A,B,C,D_1,E_1$\\
+						$A_2,B,C,D,E_2$\\
+						$A,B_3,C,D_3,E$\\
+						$E_1=E_2$ - $B\rightarrow E$\\
+						$A_2=A$ - $CE_1 \rightarrow A$\\
+						$E_1=E$ - $CE \rightarrow A$\\
+						Therfore on line two is now\\
+						$A,B,C,D,E$
+					\subsubsection{$A\rightarrow D, D\rightarrow E$ and $B\rightarrow D$}
+						$A,B,C,D_1,E_1$\\
+						$A_2,B,C,D,E_2$\\
+						$A,B_3,C,D_3,E$\\
+						$D_1=D$ - $B\rightarrow D$\\
+						$A_2=A$ - $A\rightarrow D$\\
+						$D_3=D$ - $A\rightarrow D$\\
+						$E_1=E$ - $D\rightarrow E$
+				\subsection{The following exercise is on the relation $Courses(C,T,H,R,S,G)$}
+					The relation has the following FD's\\
+					$C\rightarrow T$\\
+					$HR\rightarrow C$\\
+					$HT\rightarrow R$\\
+					$HS\rightarrow R$\\
+					$CS\rightarrow G$
+					\subsubsection{What are all the keys for $Courses$}
+						The candidate keys are:\\
+						$CSH^+=\{T,G,R\}$\\
+						$SHR^+=\{C,T,G\}$
+					\subsubsection{Verify that the given FD's are their own minimal basis}
+						$C^+=\{T\}$\\
+						$HR^+=\{C,T\}$\\
+						$HT^+=\{R,C\}$\\
+						$HS^+=\{R,C,T\}$\\
+						$CS^+=\{G,T\}$\\
+						As it can be seen no one of the FD's closure result in another FD, therefore making it minimal.
+					\subsubsection{Make the relation into a 3NF and check if any BCNF violation accour}
+						$R1(C,T)$\\
+						$R2(H,R,C,T)$\\
+						$R3(H,T,R,C)$\\
+						$R4(H,S,R,C,T)$\\
+						$R5(C,S,G,T)$\\
+						$R2$ violates BCNF due to $HT\rightarrow R$, the same with $R3$ due to $HR$ FD.
 				
-			
 \end{document}
 
 

@@ -260,4 +260,53 @@
 				\end{tabular}
 				\end{center}				
 			\end{minipage}
-\end{document}
+	\section{Design theory for Relational Databases}
+		\subsection{Functional dependencies}
+			A functional dependecy is defined as:
+			$$A_1,A_2,...,A_n \rightarrow B_1,B_2,...,B_n$$
+			Functional dependecies are constraints on a relation which states: \\
+			If two tuples agree on the $A$ attributes of the dependency they must agree on the $B$ attributes\\
+			The transitive rule states for the FDs $A\rightarrow B$ and $B\rightarrow C$ will $A\rightarrow C$ be true.\\
+			The splitting combining rule states for the FD $A\rightarrow BC$, it can be spliited into $A\rightarrow B$ and $A\rightarrow C$, or combined the other way around.\\
+			The trivial FD for the attribute $A$ is $A\rightarrow A$.\\
+			A basis of FD's are just the given FD's\\
+			The minimal basis of FD's are only singletons, and removing any FD will not be equivalent to the basis.\\ 
+		\subsubsection{Keys}
+			A key is a minimal set of attributes which will be unique for every set of attributes.\\
+			$$\{A_1,A_2,...,A_n\}$$
+			Here the attributes are part of the key.\\
+			\textbf{Superkey}: A set of attributes of which one is a key.\\
+			Some uses the terminology where key is not minimal and candidate key is minimal.\\
+		\subsubsection{Closures}
+				  A closure for the attribute $A$, is all attributes, which can be computed from which $\{A\}^+\rightarrow \{A,B,C\}$, from the singletons $A\rightarrow B$ and $B\rightarrow C$\\
+				  The closure is found by starting with the trivial, then FD's which include the derived attributes is inserted until no more informations from FD's can be added.\\
+				  The closure of $\{superKey\}^+$ will result in all attributes.\\
+				  The colsure of $\{key\}^+$ will also result in all attributes, but no attribute of the key can be removed.\\
+				  Projecting FD's onto a new relation with a limited amount attributes, will only the FD's which involves the new relation hold.
+	\section{Designing a Database}
+		\subsection{Anomalies}
+			Anomailies are repeated information in multiple tuplees.\\
+			The can lead to lost of data, if repeated data turns out to be the last data when deleted or non updated values for all repeated data.\\
+			To prevent this decomposing relations can be done\\
+			This is where all the repeated data is in one relation, and the none repated attribute is in another relation with key also.\\
+		\subsection{Boyce-Codd Normal Form}
+			To decompose the relation Boyce-Codd Normal form (BCNF) is used.\\
+			This is a rule which states, that for all FD's in the relations the left sides should be part of the super key.\\
+			So the the relation $R(A,B,C)$ with the FD's $A\rightarrow B$ and $A\rightarrow C$, will $A$ be the super key.\\
+			This relation will therefore be decomposible into two relations $R(A,B)$ and $R(A,C)$.\\
+			It can here be noted that, transitive relations may be used.\\
+			Example the relation $R(A,B,C,D)$ with the FD's $A\rightarrow B$, $B\rightarrow C$ and $B\rightarrow D$.\\
+			It can here be seen $A$ is the key due to being the only attribute from which all other attributes can be found.\\
+			Therefore the relation can be described in two relations $R(A,B)$,$R(B,C,D)$. Here BCNF will hold.\\
+			Performing a decompose of $R$ using $X\rightarrow Y$, is done by having $R_1=X^+$ and $R_2=R-(X^+-X)$\\
+			The third normal form is a modification of BCNF where the FD $X\rightarrow A$ is only a violation if $X$ is not a superkey and $A$ is prime (member of a key).\\
+			3NF can be smart due to it will always preserve FD's, which BCNF does not gurantee.
+			\subsubsection{Decompositiong with 3NF}
+				First all FD's are splitted. Then the FD's are simplified or removed if repeated.\\
+				Then the candidate key is all, keys on the right of the FD's clousing sets.\\
+				The relations will then be the simplified / minmal basis of FD's.
+		\subsection{Valid decompose}
+			A measure if the decomposition is correct, is if when the natural join is performed on the given decomposed relations, we shall get the original relation back with the same number of tuples and correct tuples.\\
+			The case method, consist of writing a tablau, with a row representing a decomposed relation. Then the row is filled with know values and unknown valeus are subscribted with the row number.\\
+			Then from the FD's the rows should be able to be combined by finding equal variables from which the subscribted variables are removed, ending up with a row with no subscribted values.
+				\end{document}
