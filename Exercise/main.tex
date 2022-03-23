@@ -1,6 +1,7 @@
 \documentclass[12pt, a4paper]{article}
 \usepackage{caption}
 \usepackage{graphicx}
+\usepackage{svg}
 \usepackage{listings}
 \usepackage{siunitx}
 \usepackage{hyperref}
@@ -277,6 +278,50 @@
 						$R4(H,S,R,C,T)$\\
 						$R5(C,S,G,T)$\\
 						$R2$ violates BCNF due to $HT\rightarrow R$, the same with $R3$ due to $HR$ FD.
+		\section{Week}
+			\subsection{Create a ER diagram from the given information}
+				\begin{figure}[h!]
+						  \centering
+						  \includegraphics[width=300px]{assets/W12E1.png}
+						  \caption{ER diagram describing a bank scenario}
+				\end{figure}
+			\subsection{Create a ER diagram from the given information}
+				\begin{figure}[h!]
+						  \centering
+						  \includegraphics[width=300px]{assets/W12E2.png}
+						  \caption{ER diagram describing a course and student enrollment}
+				\end{figure}
+		 	\subsection{Create a ER diagram from the given information}
+				\begin{figure}[h!]
+						  \centering
+						  \includegraphics[width=300px]{assets/W12E3.png}
+						  \caption{ER diagram describing a department and course situation with a weak key}
+				\end{figure}
+			\subsection{Create a relation schema from the given diagram}
+				\begin{figure}[h!]
+						  \centering
+						  \includegraphics[width=300px]{assets/W12E4.png}
+				\end{figure}
+		 		Customer(SSNO primary,phone,addr,name)\\
+				Flights(number primary,day primary, aircraft)\\
+				Bookings(SSNo primary, number primary, day primary, row, seat)
+			\subsection{Create a relation using the different methods, from the given diagram}
+				\begin{figure}[h!]
+						  \centering
+						  \includegraphics[width=300px]{assets/W12E5.png}
+				\end{figure}
+		 		\subsubsection{Straigt E/R model}
+					Courses(room,number primary)\\
+					Depts(name primary, chair)\\
+					GivenBy(number primary, name primary)\\
+					LabCourses(number primary, computerAllo)
+				\subsubsection{The object oriented}
+					The same as Depts, GivenBy and Courses but...\\
+					LavCourses(number primary, room, CcomputerAllo)
+				\subsubsection{The null method}
+					The same Depts and Given by but...\\
+					LabCourses(number primary, room, computerAllo)
+
 				
 \end{document}
 

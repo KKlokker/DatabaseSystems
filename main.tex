@@ -309,4 +309,63 @@
 			A measure if the decomposition is correct, is if when the natural join is performed on the given decomposed relations, we shall get the original relation back with the same number of tuples and correct tuples.\\
 			The case method, consist of writing a tablau, with a row representing a decomposed relation. Then the row is filled with know values and unknown valeus are subscribted with the row number.\\
 			Then from the FD's the rows should be able to be combined by finding equal variables from which the subscribted variables are removed, ending up with a row with no subscribted values.
+	\section{High-level DB models}
+		The most used model is the ER diagram, which describes schemas and their relation to other schemas.\\
+		The ER model consist of:
+		\begin{itemize}
+				  	\item Rectangles - The sets / schemas
+					\item Ovals - The attributes 
+					\item Diamonds - The relation between two schemas
+		\end{itemize}
+		A tuple in the model is called a relationship.\\
+		A relation may have mannnny sets attached.\\
+		Edges may also have labels, to indicate if two schemas are related in more ways.\\
+		A relation may also have attributes, in cases where it makes the most sense. This can also be replaced by a relation more if, many attributes may accour.\\
+		Some models like UML does not allow more than a binary relation. To combat this a connecting schema, from which relations can go out to each schema.
+		\subsection{Multiplicity of ER models}
+				  ER diagrams can also show restrictions, this include the number of relations a schema can have.\\
+				  The standard is many-many, this means a relation may involve as many as it wants from both sides.\\
+				  Then there is many-one which dictates that, a relation may only be related to one relation. This is indicated by an arrow which points towards the set if which only one can exist.\\
+				  There are also one-one which dictates only one relation can relate to another relation. This is indicated by an arrow at both ends of an edge.
+		\subsection{Subclasses in ER models}
+			A subclass use a isa object to show the subclass relation.\\
+			The object is in form of a triangle, where the parent is connected at the top and the subclass at the bottom.\\
+			The subclass will then inhert all attributes from the parent and can have new attributes or relations.\\
+			A isa object is always one-one, but the arrows are not needed.
+		\subsection{Designing a model}
+			To create a good model, the model should be simple and not include redundant infomration.\\
+			Be of course as faithfull to what it tries to model.\\
+			In some cases, a relation may not be the answer. If the the set E:
+			\begin{itemize}
+						\item Has only arrows entering it.
+						\item The only key in E is all attributes.
+						\item No relationship involves E more than once
+			\end{itemize}
+			If all these cases are met, the relation and the set should be removed, and the attributes of E and the relation should be in the related schema.\\
+		\subsection{Keys in ER models}
+			In ER models keys work like in DBMS.\\
+			Here the constraints are that a set must have a key, otherwise it is not a set, which a relation can form.\\
+			There may be more than one key, but a primary key must be picked.\\
+			With isa's the enitity must have a key which is inherted from the parent.\\
+			The key is shown by underlining the key attribute(s).\\
+			A weak key is a key from another set.\\
+			Weak keys can be valid, in a many-one binary relation which must exist.\\
+			In this scenario a key from set F can be used as a weak key for set E.\\
+			This is illustrated by the a double rectangle on the set with the weak link and a double border on the relations diamond which provides the weak key.
+		\subsection{Constraints}
+			A model may also include constraints in the relations.\\
+			By using rounded arrows, not only is it many-one relation, it states that at least one set must exists in the relation.\\
+			In the case of a restriction on the many-many relation, number critera (Ex, $<10$) is written at the intersect of edge and set and states the minimum.
+		\subsection{Converting from ER diagram to DB model}
+			To convert it is pretty straight up. The given sets and relations are converted into schemas, with the given attributes.\\
+			It may be needed to combine some schemas, this is common if a schema mostly just contains keys, and a many-one is in place.\\
+			In this case a big schema can be made, where the relations attributes and the schema with mostly key attributes are added.\\
+			When working with weak keys, the key attribute simply is the weak schema, the relation schema and of course the original schema.
+			\subsubsection{isa objects}
+				To convert isa object there are multiple ways.\\
+				The most strightforward way is creating everything as schemas.\\
+				Then the keys will connect each schema to the other to obtain all information.\\
+				The object oriented approach, makes every possible schema combination according to the isa object.\\
+				The null approach creates a schema with all attributes, from every set in the isa. Then null values are made when the object is parent etc.\\
+				The null approach makes queries the most simple and fast, but uses more unused space unlike the object orented approach which has only one tuble for every entry with no nulls, but many schemas.
 				\end{document}
