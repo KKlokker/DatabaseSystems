@@ -1,6 +1,7 @@
 \documentclass[12pt, a4paper]{article}
 \usepackage{caption}
 \usepackage{graphicx}
+\usepackage{svg}
 \usepackage{listings}
 \usepackage{siunitx}
 \usepackage{hyperref}
@@ -15,6 +16,90 @@
 }
 \usepackage{amsmath, amsfonts, amssymb, amsthm}
 \renewcommand{\thesubsubsection}{\thesubsection.\alph{subsubsection}}
+
+
+\usepackage{xcolor,listings}
+\usepackage{textcomp}
+\usepackage{color}
+\usepackage{listings}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{HTML}{C42043}
+\definecolor{backcolour}{HTML}{F2F2F2}
+\definecolor{bookColor}{cmyk}{0,0,0,0.90}  
+\color{bookColor}
+
+\lstset{upquote=true}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{codepurple},
+    numberstyle=\numberstyle,
+    stringstyle=\color{codepurple},
+    basicstyle=\footnotesize\ttfamily,
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbers=left,
+    numbersep=10pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=3,
+}
+\lstset{style=mystyle}
+\usepackage{zref-base}
+
+\makeatletter
+\newcounter{mylstlisting}
+\newcounter{mylstlines}
+\lst@AddToHook{PreSet}{%
+  \stepcounter{mylstlisting}%
+  \ifnum\mylstlines=1\relax
+    \lstset{numbers=none}
+  \else
+    \lstset{numbers=left}
+  \fi
+  \setcounter{mylstlines}{0}%
+}
+\lst@AddToHook{EveryPar}{%
+  \stepcounter{mylstlines}%
+}
+\lst@AddToHook{ExitVars}{%
+  \begingroup
+    \zref@wrapper@immediate{%
+      \zref@setcurrent{default}{\the\value{mylstlines}}%
+      \zref@labelbyprops{mylstlines\the\value{mylstlisting}}{default}%
+    }%
+  \endgroup
+}
+
+% \mylstlines print number of lines inside listing caption
+\newcommand*{\mylstlines}{%
+  \zref@extractdefault{mylstlines\the\value{mylstlisting}}{default}{0}%
+}
+\makeatother
+
+
+\newcommand\numberstyle[1]{%
+    \footnotesize
+    \color{codegray}%
+    \ttfamily
+    \ifnum#1<10 0\fi#1 |%
+}
+
+\newcommand{\beginSQL}{\begin{lstlisting}[ language=SQL,
+                    deletekeywords={IDENTITY},
+                    deletekeywords={[2]INT},
+                    morekeywords={clustered},
+                    framesep=8pt,
+                    xleftmargin=40pt,
+                    framexleftmargin=40pt,
+                    frame=tb,
+                    framerule=0pt ]}
+
 \title{Algorithms and datastructures\\Exercises}
 \date{2022}
 \author{Kristoffer Klokker}
@@ -319,12 +404,206 @@
 				SELECT MAX(price) FROM PC NATURAL JOIN Product GROUP BY maker
 			\subsubsection{Find for each speed of PC above 2.0 the average price}
 				SELECT AVG(price) FROM PC GROUP BY speed HAVING speed $>$ 2
-			
+		
+		\subsection{What are the expexted FD's in the following database and what key would it have}
+			\begin{itemize}
+				\item name
+				\item Social Security number
+				\item street address
+				\item city
+				\item state
+				\item ZIP code
+				\item area code
+				\item phone number
+			\end{itemize}
+			Social Security number $\rightarrow$ name,street address, city, state, ZIP code, area code\\
+			phone number $\rightarrow$ name
+			key: Social security number, phone number
+		\subsection{Consider the relation with schema $R(A,B,C,D)$ and FD's $AB\rightarrow C,C\rightarrow D,D\rightarrow A$}
+			\subsubsection{What are all the nontrivial FD's that follow from the given FD's? You should restrict yourself to FD's with single attributes on the rigth side}
+				$AB\rightarrow C$\\
+				$C\rightarrow D$\\
+				$D\rightarrow A$\\
+				$AB\rightarrow D$\\
+				$C\rightarrow A$
+			\subsubsection{What are all the keys of R}
+				$AB^+=\{C,D\}$\\
+				$C^+=\{A,D\}$\\
+				$D^+=\{A\}$\\
+				$BC^+=\{D,A\}$\\
+				$BD^+=\{A,C\}$\\
+				$AB,BC,DC$
+			\subsubsection{What are all the superkeys for R that is not keys?}
+				$BC,BD$	
+		\subsection{Find BCNF violations and decompose the schema}
+			\subsubsection{$R(A,B,C,D)$ with $AB\rightarrow C$, $C\rightarrow D$, and $D\rightarrow A$}
+				$AB^+=\{C,D,A\}$ - violation.\\
+				$R1=R-AB^++AB=R(A,B)$\\
+				$R2=AB^+=R2(A,C,D)$
+			\subsubsection{$R(A,B,C,D,E)$ and $AB\rightarrow C, DE\rightarrow C, B\rightarrow D$}
+				Starts wit the original relation\\
+				$R(A,B,C,D,E)$\\
+				The table violates $AB\rightarrow C$\\
+				$AB^+=\{C,D\}$\\
+				$R1=R-AB^+=R(A,B,E)$\\
+				$R2=AB^++AB=R(A,B,C,D)$\\
+				But $R2$ violates $B\rightarrow D$\\
+				$B^+=\{D\}$\\
+				$R3=R2-B^+=R(A,B,C)$\\
+				$R4=B^++B=R(B,D)$\\
+				Therefore the new realtions are $R1,R3,R4$, since none now violates BCNF.
+				\subsection{Perform the chase method on the relations $R(A,B,C),R(B,C,D),R(A,C,E)$ using the given FD's}
+					\subsubsection{$B\rightarrow E$ and $CE\rightarrow A$}
+						$A,B,C,D_1,E_1$\\
+						$A_2,B,C,D,E_2$\\
+						$A,B_3,C,D_3,E$\\
+						$E_1=E_2$ - $B\rightarrow E$\\
+						$A_2=A$ - $CE_1 \rightarrow A$\\
+						$E_1=E$ - $CE \rightarrow A$\\
+						Therfore on line two is now\\
+						$A,B,C,D,E$
+					\subsubsection{$A\rightarrow D, D\rightarrow E$ and $B\rightarrow D$}
+						$A,B,C,D_1,E_1$\\
+						$A_2,B,C,D,E_2$\\
+						$A,B_3,C,D_3,E$\\
+						$D_1=D$ - $B\rightarrow D$\\
+						$A_2=A$ - $A\rightarrow D$\\
+						$D_3=D$ - $A\rightarrow D$\\
+						$E_1=E$ - $D\rightarrow E$
+				\subsection{The following exercise is on the relation $Courses(C,T,H,R,S,G)$}
+					The relation has the following FD's\\
+					$C\rightarrow T$\\
+					$HR\rightarrow C$\\
+					$HT\rightarrow R$\\
+					$HS\rightarrow R$\\
+					$CS\rightarrow G$
+					\subsubsection{What are all the keys for $Courses$}
+						The candidate keys are:\\
+						$CSH^+=\{T,G,R\}$\\
+						$SHR^+=\{C,T,G\}$
+					\subsubsection{Verify that the given FD's are their own minimal basis}
+						$C^+=\{T\}$\\
+						$HR^+=\{C,T\}$\\
+						$HT^+=\{R,C\}$\\
+						$HS^+=\{R,C,T\}$\\
+						$CS^+=\{G,T\}$\\
+						As it can be seen no one of the FD's closure result in another FD, therefore making it minimal.
+					\subsubsection{Make the relation into a 3NF and check if any BCNF violation accour}
+						$R1(C,T)$\\
+						$R2(H,R,C,T)$\\
+						$R3(H,T,R,C)$\\
+						$R4(H,S,R,C,T)$\\
+						$R5(C,S,G,T)$\\
+						$R2$ violates BCNF due to $HT\rightarrow R$, the same with $R3$ due to $HR$ FD.
+		\section{Week}
+			\subsection{Create a ER diagram from the given information}
+				\begin{figure}[h!]
+						  \centering
+						  \includegraphics[width=300px]{assets/W12E1.png}
+						  \caption{ER diagram describing a bank scenario}
+				\end{figure}
+			\subsection{Create a ER diagram from the given information}
+				\begin{figure}[h!]
+						  \centering
+						  \includegraphics[width=300px]{assets/W12E2.png}
+						  \caption{ER diagram describing a course and student enrollment}
+				\end{figure}
+		 	\subsection{Create a ER diagram from the given information}
+				\begin{figure}[h!]
+						  \centering
+						  \includegraphics[width=300px]{assets/W12E3.png}
+						  \caption{ER diagram describing a department and course situation with a weak key}
+				\end{figure}
+			\subsection{Create a relation schema from the given diagram}
+				\begin{figure}[h!]
+						  \centering
+						  \includegraphics[width=300px]{assets/W12E4.png}
+				\end{figure}
+		 		Customer(SSNO primary,phone,addr,name)\\
+				Flights(number primary,day primary, aircraft)\\
+				Bookings(SSNo primary, number primary, day primary, row, seat)
+			\subsection{Create a relation using the different methods, from the given diagram}
+				\begin{figure}[h!]
+						  \centering
+						  \includegraphics[width=300px]{assets/W12E5.png}
+				\end{figure}
+		 		\subsubsection{Straigt E/R model}
+					Courses(room,number primary)\\
+					Depts(name primary, chair)\\
+					GivenBy(number primary, name primary)\\
+					LabCourses(number primary, computerAllo)
+				\subsubsection{The object oriented}
+					The same as Depts, GivenBy and Courses but...\\
+					LavCourses(number primary, room, CcomputerAllo)
+				\subsubsection{The null method}
+					The same Depts and Given by but...\\
+					LabCourses(number primary, room, computerAllo)
+		\section{Week}
+			\subsection{Create the constraint for the following database}
+				Movies(title , year, length, genre, studioName, producerC$\#$)\\
+				StarsIn(movie Title , movieYear, starName)\\
+				MovieStar(name, address, gender, birthdate )\\
+				MovieExec(name, address, cert$\#$ , netWorth)\\
+				Studio(name, address , presC$\#$)
+				\subsubsection{The producer of a movie must be someone mentioned in MovieExec. Modifications to MovieExec that violate this constraint are rejected.}
+					Movies(title , year, length, genre, studioName, producerC$\#$ REFERENCES MovieExec.cert$\#$ )					
+				\subsubsection{Repeat (a), but violations result in the producerC$\#$ in Movie being set to NULL}
+					Movies(title , year, length, genre, studioName, producerC$\#$ REFERENCES MovieExec.cert$\#$ DEFERRABLE INITIALLY DEFERRED)									
+				\subsubsection{Repeat (a), but violations result in the deletion or update of the offending Movie tuple}
+					Movies(title , year, length, genre, studioName, producerC$\#$ REFERENCES MovieExec.cert$\#$\\
+						 ON DELETE CASCADE \\
+						 ON UPDATE CASCADE  )
+				\subsubsection{A movie that appears in Starsln must also appear in Movie. Handle violations by rejecting the modification.}
+					StarsIn(movieTitle REFERENCES Movies.title , movieYear, starName)\\		
+				\subsubsection{A star appearing in Starsln must also appear in MovieStar. Handle violations by deleting violating tuples.}
+					StarsIn(movieTitle , movieYear, starName REFERENCES MovieStar.name\\
+						ON DELTE NULL )\\							
+				\subsubsection{The movies can not contain a movie before 1915}
+					Movies(title , year CHECK (year >= 1915), length, genre, studioName, producerC$\#$)\\					
+				\subsubsection{The movies can not contain a movie shorter than 60 and longer than 250}
+					Movies(title , year, length CHECK (length > 60 AND 250 > length), genre, studioName, producerC$\#$)\\
+				\subsubsection{The movies can only be from Disney, Fox, MGM, or Paramount.}
+					Movies(title , year, length, genre, studioName CHECK(studioName = 'Dinsey' OR studioName = 'MGM' OR studioName = 'Paramount', producerC$\#$)\\
+			\subsection{Write the following trigger analoge for insert and delete}	
+				\beginSQL
+CREATE TRIGGER AvgNetWorthTrigger
+AFTER UPDATE OF netWorthON MovieExec
+REFERENCING
+	OLD TABLE AS OldStuff,
+	NEW TABLE AS NewStuff
+FOR EACH STATEMENT
+WHEN (500000 > (SELECT AVG(netWorth) FROM MovieExec))
+BEGIN
+	DELETE FROM MovieExec
+	WHERE (name, address , cert# , netWorth) IN NewStuff;
+	INSERT INTO MovieExec
+		(SELECT * FROM OldStuff);
+END;
+				\end{lstlisting}
+				\beginSQL
+CREATE TRIGGER AvgNetWorthTrigger
+AFTER INSERT OF netWorthON MovieExec
+REFERENCING NEW ROW AS NewTuple
+FOR EACH STATEMENT
+WHEN (500000 > (SELECT AVG(netWorth) FROM MovieExec))
+BEGIN
+	DELETE FROM MovieExec
+	WHERE (name, address , cert# , netWorth) IN NewTuple;
+END;
+				\end{lstlisting}
+				\beginSQL
+CREATE TRIGGER AvgNetWorthTrigger
+AFTER DELETE OF netWorthON MovieExec
+REFERENCING OLD ROW AS DeletedTuple
+FOR EACH STATEMENT
+WHEN (500000 > (SELECT AVG(netWorth) FROM MovieExec))
+BEGIN
+	INSERT INTO MovieExec
+		(SELECT * FROM DeletedTuple);
+END;
+				\end{lstlisting}
 				
 				
-					
-				
-			
 \end{document}
 
 

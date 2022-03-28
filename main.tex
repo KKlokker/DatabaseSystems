@@ -17,14 +17,87 @@
 \date{2022}
 \author{Kristoffer Klokker}
 
+\usepackage{xcolor,listings}
+\usepackage{textcomp}
+\usepackage{color}
 \usepackage{listings}
-\lstset{
-  language=XML,
-  tabsize=3,
-  morekeywords={encoding,
-    xs:schema,xs:element,xs:complexType,xs:sequence,xs:attribute}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{HTML}{C42043}
+\definecolor{backcolour}{HTML}{F2F2F2}
+\definecolor{bookColor}{cmyk}{0,0,0,0.90}  
+\color{bookColor}
+
+\lstset{upquote=true}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{codepurple},
+    numberstyle=\numberstyle,
+    stringstyle=\color{codepurple},
+    basicstyle=\footnotesize\ttfamily,
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbers=left,
+    numbersep=10pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=3,
+}
+\lstset{style=mystyle}
+\usepackage{zref-base}
+
+\makeatletter
+\newcounter{mylstlisting}
+\newcounter{mylstlines}
+\lst@AddToHook{PreSet}{%
+  \stepcounter{mylstlisting}%
+  \ifnum\mylstlines=1\relax
+    \lstset{numbers=none}
+  \else
+    \lstset{numbers=left}
+  \fi
+  \setcounter{mylstlines}{0}%
+}
+\lst@AddToHook{EveryPar}{%
+  \stepcounter{mylstlines}%
+}
+\lst@AddToHook{ExitVars}{%
+  \begingroup
+    \zref@wrapper@immediate{%
+      \zref@setcurrent{default}{\the\value{mylstlines}}%
+      \zref@labelbyprops{mylstlines\the\value{mylstlisting}}{default}%
+    }%
+  \endgroup
 }
 
+% \mylstlines print number of lines inside listing caption
+\newcommand*{\mylstlines}{%
+  \zref@extractdefault{mylstlines\the\value{mylstlisting}}{default}{0}%
+}
+\makeatother
+
+
+\newcommand\numberstyle[1]{%
+    \footnotesize
+    \color{codegray}%
+    \ttfamily
+    \ifnum#1<10 0\fi#1 |%
+}
+
+\newcommand{\beginSQL}{\begin{lstlisting}[ language=SQL,
+                    deletekeywords={IDENTITY},
+                    deletekeywords={[2]INT},
+                    morekeywords={clustered},
+                    framesep=8pt,
+                    xleftmargin=40pt,
+                    framexleftmargin=40pt,
+                    frame=tb,
+                    framerule=0pt ]}
 
 \def\ojoin{\setbox0=\hbox{$\bowtie$}%
   \rule[-.02ex]{.25em}{.4pt}\llap{\rule[\ht0]{.25em}{.4pt}}}
@@ -372,4 +445,191 @@
 			This will return the names and the sum of ages with the same name but only people over 18 count.
 			
 		
-\end{document}
+	\section{Design theory for Relational Databases}
+		\subsection{Functional dependencies}
+			A functional dependecy is defined as:
+			$$A_1,A_2,...,A_n \rightarrow B_1,B_2,...,B_n$$
+			Functional dependecies are constraints on a relation which states: \\
+			If two tuples agree on the $A$ attributes of the dependency they must agree on the $B$ attributes\\
+			The transitive rule states for the FDs $A\rightarrow B$ and $B\rightarrow C$ will $A\rightarrow C$ be true.\\
+			The splitting combining rule states for the FD $A\rightarrow BC$, it can be spliited into $A\rightarrow B$ and $A\rightarrow C$, or combined the other way around.\\
+			The trivial FD for the attribute $A$ is $A\rightarrow A$.\\
+			A basis of FD's are just the given FD's\\
+			The minimal basis of FD's are only singletons, and removing any FD will not be equivalent to the basis.\\ 
+		\subsubsection{Keys}
+			A key is a minimal set of attributes which will be unique for every set of attributes.\\
+			$$\{A_1,A_2,...,A_n\}$$
+			Here the attributes are part of the key.\\
+			\textbf{Superkey}: A set of attributes of which one is a key.\\
+			Some uses the terminology where key is not minimal and candidate key is minimal.\\
+		\subsubsection{Closures}
+				  A closure for the attribute $A$, is all attributes, which can be computed from which $\{A\}^+\rightarrow \{A,B,C\}$, from the singletons $A\rightarrow B$ and $B\rightarrow C$\\
+				  The closure is found by starting with the trivial, then FD's which include the derived attributes is inserted until no more informations from FD's can be added.\\
+				  The closure of $\{superKey\}^+$ will result in all attributes.\\
+				  The colsure of $\{key\}^+$ will also result in all attributes, but no attribute of the key can be removed.\\
+				  Projecting FD's onto a new relation with a limited amount attributes, will only the FD's which involves the new relation hold.
+	\section{Designing a Database}
+		\subsection{Anomalies}
+			Anomailies are repeated information in multiple tuplees.\\
+			The can lead to lost of data, if repeated data turns out to be the last data when deleted or non updated values for all repeated data.\\
+			To prevent this decomposing relations can be done\\
+			This is where all the repeated data is in one relation, and the none repated attribute is in another relation with key also.\\
+		\subsection{Boyce-Codd Normal Form}
+			To decompose the relation Boyce-Codd Normal form (BCNF) is used.\\
+			This is a rule which states, that for all FD's in the relations the left sides should be part of the super key.\\
+			So the the relation $R(A,B,C)$ with the FD's $A\rightarrow B$ and $A\rightarrow C$, will $A$ be the super key.\\
+			This relation will therefore be decomposible into two relations $R(A,B)$ and $R(A,C)$.\\
+			It can here be noted that, transitive relations may be used.\\
+			Example the relation $R(A,B,C,D)$ with the FD's $A\rightarrow B$, $B\rightarrow C$ and $B\rightarrow D$.\\
+			It can here be seen $A$ is the key due to being the only attribute from which all other attributes can be found.\\
+			Therefore the relation can be described in two relations $R(A,B)$,$R(B,C,D)$. Here BCNF will hold.\\
+			Performing a decompose of $R$ using $X\rightarrow Y$, is done by having $R_1=X^+$ and $R_2=R-(X^+-X)$\\
+			The third normal form is a modification of BCNF where the FD $X\rightarrow A$ is only a violation if $X$ is not a superkey and $A$ is prime (member of a key).\\
+			3NF can be smart due to it will always preserve FD's, which BCNF does not gurantee.
+			\subsubsection{Decompositiong with 3NF}
+				First all FD's are splitted. Then the FD's are simplified or removed if repeated.\\
+				Then the candidate key is all, keys on the right of the FD's clousing sets.\\
+				The relations will then be the simplified / minmal basis of FD's.
+		\subsection{Valid decompose}
+			A measure if the decomposition is correct, is if when the natural join is performed on the given decomposed relations, we shall get the original relation back with the same number of tuples and correct tuples.\\
+			The case method, consist of writing a tablau, with a row representing a decomposed relation. Then the row is filled with know values and unknown valeus are subscribted with the row number.\\
+			Then from the FD's the rows should be able to be combined by finding equal variables from which the subscribted variables are removed, ending up with a row with no subscribted values.
+		\subsection{Constraints}
+			\subsubsection{Key}
+				Keys are a way of a constraint which limits for an attribute no tubles can not have the same keys.\\
+				done by when creating the attributes in a schema fx. \beginSQL
+workerId INT PRIMARY KEY\end{lstlisting}
+				Or if multiple then at end of schema the following can be done: 
+\beginSQL
+PRIMARY KEY (workerID, name)
+\end{lstlisting}
+				Foreign keys are a way of referencing a key from another table. This constraints it such a tuble with the foreign key must exist before in the foreign table before a tuble can be created.\\
+				If this constraint is unwanted the \beginSQL 
+DEFERALE INITIALLY DEFERRED \end{lstlisting} can be used such a tuple can be created even though the key does not exists.\\
+				This is done by at attribute level: \beginSQL
+FOREIGN KEY(worker) REFERENCES workers.workerId\end{lstlisting}
+				When updating the foreign key, which a tuple depend upon the defualt behavior is to reject the changes.\\
+				It can also be cascaded to update the depended value, or null the depended tuple.\\
+				It can also be set upon each action DELETE and Update by \beginSQL
+FOREIGN KEY(worker) REFRERENCES workers.workerId ON DELETE SET NULL ON UPDATE CASCADE \end{lstlisting}
+				This will when deleted set the depended tuble value to null and when updated the depending tuple is updated with the update.
+			\subsubsection{Checks}
+				The check constrain is used when creating a schema, and defines a way to only allow tuples if the value upholds a constraint.\\
+				Example can be \beginSQL
+price INT CHECK (price <= 100) \end{lstlisting} this constraints the price to be equal or above 100.\\
+				A check can also be at the end and check multiple attributes \beginSQL
+CHECK (price <= 100 OR name = 'cheapProduct')\end{lstlisting}
+			\subsubsection{Assertion}
+				Assertions are global rules in the database, which are checked upon any changes.\\
+				Example \beginSQL
+CREATE ASSERTION onlyValidWorkers CHECK (
+	NOT EXTSTS (
+		SELECT worker FROM workers WHERE workerId < 0
+		)
+);
+\end{lstlisting}
+				This checks if any workerId is negative.\\
+				Assertion is not a thing in PostSQL where tiggers are used instead.
+			\subsubsection{Event condition action rules / tirggers}
+				\beginSQL
+CREATE TRIGGER workTrig
+	AFTER INSERT ON Workers
+	REFERENCING NEW ROW AS NewTuple
+	FOR EACH ROW
+	WHEN (NewTuple.workerId NOT IN (SELECT workerId FROM Coworkers)
+	INSERT INTO Coworkers(workerId, name) VALUES (NewTuple.workerId, newTuple.name);
+\end{lstlisting}
+				As it can be seen the event is at line 1, when the tirgger is checked.\\
+				Then line 3 and 4 reference the new inserted rows and for each of them checks the condition of line 5.\\
+				The condition checks if tubles values exists in another table and if true the action on line 6 is triggered.\\
+				The event can use the keywordst DELETE, INSERT or UPDATE ... ON attribute\\
+				The foreach can be absent to work on the whole statements even if multiple inserts or such.\\
+				In case of more wanted actions the action part can start with BEGIN and END at the end.\\
+				The reference part on an update can have both row by \beginSQL
+REFERENCING
+	OLD ROW AS ooo
+	NEW ROW AS nnn
+				\end{lstlisting} but in PostSQL referencing is not used and the row is just OLD and new is NEW on update.\\
+				Likewise PostSQL only allow functions in the trigger, where a function is defined as \beginSQL
+CREATE FUNCTION checkWorkTime() RETURNS TRIGGER AS $$BEGIN
+	IF NEW.time < OLD.time THEN
+	UPDATE workers SET fishy = true WHERE workerId = NEW.workerId;
+	END IF;
+	RETURN NEW;
+END$$ 
+LANGUAGE plpgsql;
+	\end{lstlisting}
+				This funciton can then be triggered in postSQL with: \beginSQL
+CREATE TRIGGER fishyWorker
+	AFTER UPDATE ON Workers
+	FOR EACH ROW
+	EXECUTE PROCEDURE checkWorkTime();
+				\end{lstlisting}
+				A trigger may not fix the situation but can use \beginSQL
+IF True
+THEN RAISE EXCEPTION 'Worker is fishy!'
+END;
+				\end{lstlisting}
+	\section{High-level DB models}
+		The most used model is the ER diagram, which describes schemas and their relation to other schemas.\\
+		The ER model consist of:
+		\begin{itemize}
+				  	\item Rectangles - The sets / schemas
+					\item Ovals - The attributes 
+					\item Diamonds - The relation between two schemas
+		\end{itemize}
+		A tuple in the model is called a relationship.\\
+		A relation may have mannnny sets attached.\\
+		Edges may also have labels, to indicate if two schemas are related in more ways.\\
+		A relation may also have attributes, in cases where it makes the most sense. This can also be replaced by a relation more if, many attributes may accour.\\
+		Some models like UML does not allow more than a binary relation. To combat this a connecting schema, from which relations can go out to each schema.
+		\subsection{Multiplicity of ER models}
+				  ER diagrams can also show restrictions, this include the number of relations a schema can have.\\
+				  The standard is many-many, this means a relation may involve as many as it wants from both sides.\\
+				  Then there is many-one which dictates that, a relation may only be related to one relation. This is indicated by an arrow which points towards the set if which only one can exist.\\
+				  There are also one-one which dictates only one relation can relate to another relation. This is indicated by an arrow at both ends of an edge.
+		\subsection{Subclasses in ER models}
+			A subclass use a isa object to show the subclass relation.\\
+			The object is in form of a triangle, where the parent is connected at the top and the subclass at the bottom.\\
+			The subclass will then inhert all attributes from the parent and can have new attributes or relations.\\
+			A isa object is always one-one, but the arrows are not needed.
+		\subsection{Designing a model}
+			To create a good model, the model should be simple and not include redundant infomration.\\
+			Be of course as faithfull to what it tries to model.\\
+			In some cases, a relation may not be the answer. If the the set E:
+			\begin{itemize}
+						\item Has only arrows entering it.
+						\item The only key in E is all attributes.
+						\item No relationship involves E more than once
+			\end{itemize}
+			If all these cases are met, the relation and the set should be removed, and the attributes of E and the relation should be in the related schema.\\
+
+			
+		\subsection{Keys in ER models}
+			In ER models keys work like in DBMS.\\
+			Here the constraints are that a set must have a key, otherwise it is not a set, which a relation can form.\\
+			There may be more than one key, but a primary key must be picked.\\
+			With isa's the enitity must have a key which is inherted from the parent.\\
+			The key is shown by underlining the key attribute(s).\\
+			A weak key is a key from another set.\\
+			Weak keys can be valid, in a many-one binary relation which must exist.\\
+			In this scenario a key from set F can be used as a weak key for set E.\\
+			This is illustrated by the a double rectangle on the set with the weak link and a double border on the relations diamond which provides the weak key.
+		\subsection{Constraints}
+			A model may also include constraints in the relations.\\
+			By using rounded arrows, not only is it many-one relation, it states that at least one set must exists in the relation.\\
+			In the case of a restriction on the many-many relation, number critera (Ex, $<10$) is written at the intersect of edge and set and states the minimum.
+		\subsection{Converting from ER diagram to DB model}
+			To convert it is pretty straight up. The given sets and relations are converted into schemas, with the given attributes.\\
+			It may be needed to combine some schemas, this is common if a schema mostly just contains keys, and a many-one is in place.\\
+			In this case a big schema can be made, where the relations attributes and the schema with mostly key attributes are added.\\
+			When working with weak keys, the key attribute simply is the weak schema, the relation schema and of course the original schema.
+			\subsubsection{isa objects}
+				To convert isa object there are multiple ways.\\
+				The most strightforward way is creating everything as schemas.\\
+				Then the keys will connect each schema to the other to obtain all information.\\
+				The object oriented approach, makes every possible schema combination according to the isa object.\\
+				The null approach creates a schema with all attributes, from every set in the isa. Then null values are made when the object is parent etc.\\
+				The null approach makes queries the most simple and fast, but uses more unused space unlike the object orented approach which has only one tuble for every entry with no nulls, but many schemas.
+		
+				\end{document}
