@@ -13,7 +13,7 @@
 \usepackage{amsmath, amsfonts, amssymb, amsthm}
 \usepackage{algpseudocode}
 \usepackage{algorithm}
-\title{Algortihms and datastructures}
+\title{Database management \\and database systems}
 \date{2022}
 \author{Kristoffer Klokker}
 
@@ -578,6 +578,12 @@ END;
 					\item Ovals - The attributes 
 					\item Diamonds - The relation between two schemas
 		\end{itemize}
+		
+		\begin{figure}[h!]
+			\centering
+			\caption{ER model, with a schema, attributes and a relation.\\ A many-one relation, so right schema can only have 1 left shema.}
+			\includegraphics[width=300px]{assets/ERModel.png}
+		\end{figure}
 		A tuple in the model is called a relationship.\\
 		A relation may have mannnny sets attached.\\
 		Edges may also have labels, to indicate if two schemas are related in more ways.\\
@@ -587,8 +593,15 @@ END;
 				  ER diagrams can also show restrictions, this include the number of relations a schema can have.\\
 				  The standard is many-many, this means a relation may involve as many as it wants from both sides.\\
 				  Then there is many-one which dictates that, a relation may only be related to one relation. This is indicated by an arrow which points towards the set if which only one can exist.\\
-				  There are also one-one which dictates only one relation can relate to another relation. This is indicated by an arrow at both ends of an edge.
+				  There are also one-one which dictates only one relation can relate to another relation. This is indicated by an arrow at both ends of an edge.\\
+				  A rounded arrow means exactly one
 		\subsection{Subclasses in ER models}
+		
+		\begin{figure}[h]
+			\centering
+			\caption{ER model with the button schema being a subclass of top schema.}
+			\includegraphics[width=100px]{assets/ERSubclass.png}
+		\end{figure}
 			A subclass use a isa object to show the subclass relation.\\
 			The object is in form of a triangle, where the parent is connected at the top and the subclass at the bottom.\\
 			The subclass will then inhert all attributes from the parent and can have new attributes or relations.\\
@@ -606,6 +619,12 @@ END;
 
 			
 		\subsection{Keys in ER models}
+		
+		\begin{figure}[h]
+			\centering
+			\caption{ER model with a weak key, where the left schema has two keys its own attribute and the attribute from the right schema}
+			\includegraphics[width=300px]{assets/ERWeak.png}
+		\end{figure}
 			In ER models keys work like in DBMS.\\
 			Here the constraints are that a set must have a key, otherwise it is not a set, which a relation can form.\\
 			There may be more than one key, but a primary key must be picked.\\

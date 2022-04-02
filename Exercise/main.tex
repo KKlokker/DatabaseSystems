@@ -179,6 +179,7 @@
 					ALTER TABKE Printer DROP color 
 				\subsubsection{Add an $od$ attribute for PC, which defaults to none an otherwise can be cd or dvd}
 					ALTER TABLE PC ADD VARCHAR[20] od DEFAULT 'none'
+		\setcounter{section}{7}
 		\section{Week}
 			\subsection{Working with linear notation}
 				The following exercises uses the following schema:\\
@@ -340,9 +341,9 @@
 			\subsubsection{Who were the male stars in $Titanic$}
 				SELECT name FROM Movies, StarsIn, MovieStar WHERE title = 'Titanic' AND title = movieTitle AND starName = name AND gender = male
 			\subsubsection{Which stars appeared in movies produced by MGM in 1995}
-				SELECT starName FROM Movies, StarsIn WHERE studioName = 'MGM' AND title = movieTitle
+				SELECT starName FROM Movies NATURAL JOIN StarsIn WHERE studioName = 'MGM' AND title = movieTitle
 			\subsubsection{Who is the presiden of MGM Studios}
-				SELECT MovieExec.name FROM Studio, MovieExec WHERE Studio.name = 'MGM' AND presC$\#$ = cert$\#$
+				SELECT MovieExec.name FROM Studio NATURAL JOIN MovieExec WHERE Studio.name = 'MGM' AND presC$\#$ = cert$\#$
 			\subsubsection{Which movies are longer than $Gone with the Wind$}
 				SELECT title FROM Movies WHERE length $>$ (SELECT length FROM MOVIES WHERE title = 'Gone with the Wind')
 			\subsubsection{Which executive are worth more than Merv Griffin}
@@ -364,47 +365,52 @@
 			Laptop(model, speed, ram, hd, screen, price)\\
 			Printer(model, color, type, price)\\
 			\subsubsection{Find the makers of PC's with a speed of at least 3.0}
-				SELECT model FROM PC WHERE speed $>$ 3.0
+				SELECT maker FORM Product WHERE model EXISTS (SELECT model FROM PC WHERE speed $>$ 3.0)
 			\subsubsection{Find the printers with the highest price}
 				SELECT model FROM Printer WHERE price = (SELECT MAX(price) FROM Printer)
 			\subsubsection{Find the laptops whose speed is slower than that of any PC}
-				SELECT model FROM Laptop WHERE speed < (SELECT MIN(speed) FROM PC)
+				SELECT model FROM Laptop WHERE speed $<$ (SELECT MIN(speed) FROM PC)
 			\subsubsection{Find the model number of the item (PC, Laptop, Printer) with the highest price}
 				SELECT model FROM \\
 					(SELECT model, price FROM PC UNION SELECT model,price FROM Laptop UNION SELECT model,price FROM Printer) \\
 					WHERE price = SELECT MAX(price) FROM \\
 						(SELECT MAX(price) FROM PC) UNION (SELECT MAX(price) FROM Laptop) UNION  (SELECT MAX(price) FROM Printer)) 
 			\subsubsection{Find the maker of the color printer with lowest price}
-				SELECT model FROM Printer WHERE type=color AND price = (SELECT MIN(price) FROM Printer)
+				SELECT maker FROM Products WHERE model EXISTS (SELECT model FROM Printer WHERE type=color AND price = (SELECT MIN(price) FROM Printer))
 	\section{Week}
 		\subsection{Write SQL queries for the following database}
 			$Product(maker, model, type)$\\
 			$PC(model, speed,ram, hd, price)$\\
 			$Laptop(model, speed, ram, hd ,screen, price)$\\
 			$Printer(model, color, type, price)$
-			\subsubsection{What PC models have a speed grater than 3}
+			\subsubsection{What PC models have a speed greater than 3}
 				SELECT * FROM PC WHERE speed $>$ 3
 			\subsubsection{Find model and price for all products made by manufacturer B}
-				SELECT price, model FROM PC, Laptop, Printer Where model EXISTS (SELECT model FROM product WHERE maker = B)
+				SELECT price, model FROM\\
+				(SELECT price, model FROM PC) UNION\\
+				(SELECT price, model FROM Printer) UNION\\
+				(SELECT price, model FROM Laptop)\\				
+				Where model EXISTS (SELECT model FROM product WHERE maker = B)
 			\subsubsection{Find manufactureres of at least two different computers with speed grather than 2.8}
-				SELECT maker FROM (SELECT maker FROM Product WHERE model EXIST (SELECT models FROM PC, Laptop Where speed $>$ 2.8)) WHERE COUNT(maker) $>$= 2		
+				SELECT maker FROM (SELECT maker FROM Product WHERE model EXIST\\
+				((SELECT models FROM PC) UNION (SELECT models FROM  Laptop) Where speed $>$ 2.8)) WHERE COUNT(maker) $>$= 2		
 			\subsubsection{Find the average speed of PC's}
 				SELECT AVG(speed) FROM PC
 			\subsubsection{Find the average speed of laptops costing over \$1000}
-				SELECT * FROM Laptops WHERE price $>$ 1000
+				SELECT AVG(speed) FROM Laptops WHERE price $>$ 1000
 			\subsubsection{Find the average price of PC's and Laptops made by manufacturer "D"}
-				SELECT AVG(price) FROM Laptop, PC WHERE model EXIST (SELECT model FROM Product WHERE maker = 'D')
+				SELECT AVG(price) FROM (SELECT model, price FROM Laptop) UNION (SELECT model, price FROM PC) WHERE model EXIST (SELECT model FROM Product WHERE maker = 'D')
 			\subsubsection{Find for each different speed, the average price of a PC}
 				SELECT AVG(price) FROM PC GROUP BY speed
 			\subsubsection{Find for each manufacturer the average screen size of its laptops}
-				SELECT AVG(screen) FROM PC NATURAL JOING Product GROUP BY maker
+				SELECT maker, AVG(screen) FROM PC NATURAL JOING Product GROUP BY maker
 			\subsubsection{Find the manufacturers that make at least three different model of PC}
-				SELECT maker FROM PC NATURAL JOIN Product GROUP BY maker HAVING COUNT(*) $>$ 2
+				SELECT maker FROM product WHERE type='pc' GROUP BY maker HAVING COUNT(*) $>$ 2
 			\subsubsection{Find for each manufacturer who selss PC's the maximum price of a PC.}
 				SELECT MAX(price) FROM PC NATURAL JOIN Product GROUP BY maker
 			\subsubsection{Find for each speed of PC above 2.0 the average price}
 				SELECT AVG(price) FROM PC GROUP BY speed HAVING speed $>$ 2
-		
+	\section{Week}
 		\subsection{What are the expexted FD's in the following database and what key would it have}
 			\begin{itemize}
 				\item name
@@ -432,9 +438,9 @@
 				$D^+=\{A\}$\\
 				$BC^+=\{D,A\}$\\
 				$BD^+=\{A,C\}$\\
-				$AB,BC,DC$
+				$AB,BC,DB$
 			\subsubsection{What are all the superkeys for R that is not keys?}
-				$BC,BD$	
+				$BC,BD,ABC,ABD,ABCD,BCD$	
 		\subsection{Find BCNF violations and decompose the schema}
 			\subsubsection{$R(A,B,C,D)$ with $AB\rightarrow C$, $C\rightarrow D$, and $D\rightarrow A$}
 				$AB^+=\{C,D,A\}$ - violation.\\
@@ -452,7 +458,7 @@
 				$R3=R2-B^+=R(A,B,C)$\\
 				$R4=B^++B=R(B,D)$\\
 				Therefore the new realtions are $R1,R3,R4$, since none now violates BCNF.
-				\subsection{Perform the chase method on the relations $R(A,B,C),R(B,C,D),R(A,C,E)$ using the given FD's}
+				\subsection{Perform the chase method on the relations \\$R(A,B,C),R(B,C,D),R(A,C,E)$ using the given FD's}
 					\subsubsection{$B\rightarrow E$ and $CE\rightarrow A$}
 						$A,B,C,D_1,E_1$\\
 						$A_2,B,C,D,E_2$\\
@@ -478,9 +484,8 @@
 					$HS\rightarrow R$\\
 					$CS\rightarrow G$
 					\subsubsection{What are all the keys for $Courses$}
-						The candidate keys are:\\
-						$CSH^+=\{T,G,R\}$\\
-						$SHR^+=\{C,T,G\}$
+						The candidate key are:\\
+						$\{HS\}^+=\{H,S,R,C,T,G\}$
 					\subsubsection{Verify that the given FD's are their own minimal basis}
 						$C^+=\{T\}$\\
 						$HR^+=\{C,T\}$\\
@@ -490,11 +495,12 @@
 						As it can be seen no one of the FD's closure result in another FD, therefore making it minimal.
 					\subsubsection{Make the relation into a 3NF and check if any BCNF violation accour}
 						$R1(C,T)$\\
-						$R2(H,R,C,T)$\\
-						$R3(H,T,R,C)$\\
-						$R4(H,S,R,C,T)$\\
-						$R5(C,S,G,T)$\\
-						$R2$ violates BCNF due to $HT\rightarrow R$, the same with $R3$ due to $HR$ FD.
+						$R2(H,R,C)$\\
+						$R3(H,T,R)$\\
+						$R4(H,S,R)$\\
+						$R5(C,S,G)$\\
+						All if the schemas are in BCNF
+		\clearpage
 		\section{Week}
 			\subsection{Create a ER diagram from the given information}
 				\begin{figure}[h!]
@@ -529,15 +535,15 @@
 				\end{figure}
 		 		\subsubsection{Straigt E/R model}
 					Courses(room,number primary)\\
-					Depts(name primary, chair)\\
-					GivenBy(number primary, name primary)\\
+					Depts(name primary, chair, depName primary)\\
+					GivenBy(number primary, name primary, depName primary)\\
 					LabCourses(number primary, computerAllo)
 				\subsubsection{The object oriented}
 					The same as Depts, GivenBy and Courses but...\\
-					LavCourses(number primary, room, CcomputerAllo)
+					LabCourses(number primary, room, ComputerAllo, depName primary)
 				\subsubsection{The null method}
 					The same Depts and Given by but...\\
-					LabCourses(number primary, room, computerAllo)
+					LabCourses(number primary, room, computerAllo, depName primary)
 		\section{Week}
 			\subsection{Create the constraint for the following database}
 				Movies(title , year, length, genre, studioName, producerC$\#$)\\
