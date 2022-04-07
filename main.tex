@@ -260,6 +260,50 @@
 				\end{tabular}
 				\end{center}				
 			\end{minipage}
+	\section{Transaction}
+		A transaction is a collection of queries which is executed atomicly.\\
+		This is to prevent race conditions in case of read then write.\\
+		The transaction is also used such it can both end up commiting or rollback changes it has done.\\
+		The transaction is started by: 
+		\beginSQL 
+			START TRANSACTION
+			.
+			.
+			IF...
+			COMMIT
+			ELSE
+			ROLLBACK
+		\end{lstlisting}
+		A transaction can also have different proberties.
+		This includes it being able to read only or red write. Where read only makes it possible for more concurrency.\\
+		This is set by \beginSQL
+		SET TRANSACTION READ ONLY \end{lstlisting} OR READ WRITE in the other case, but this is default. \\
+		This is added like other attributes before the transaction starts.\\[4mm]
+		For a transaction there are 3 different terms which is used for isolations levels:\\
+		\begin{itemize}
+				  \item Dirty reads
+					\item Nonrepeatable reads
+					\item Phantoms
+		\end{itemize}	
+		Dirty reads are a term for uncommitted data, which may be read. This may be a tradeoff which can be made for a faster operation.\\
+		Nonrepeatable reads refers to if a transaction does multiple reads, if allowed the reads may differ due to database manipulations or inserts.\\
+		Phantom tubles are tubles which are inserted while a transaction is ongoing.\\[4mm]
+		There are 4 diffferent isolations levels:
+		\begin{itemize}
+				  \item Read uncommited
+					\item Read commited
+					\item Repeatable read
+					\item SSerializable
+		\end{itemize}	
+		As default the transaction is set as Serializable, which does not read dirty, has repeatable read, and does not allow phantoms.\\
+		Repeatable read, does not allow dirty reads, has repeatable reads and does allow phantoms.\\
+		Read committed does not allow dirty reads, has nonrepeatable reads and allow phantoms.\\
+		Read uncommited allows dirty reads and phantoms and is nonrepeatable.\\
+		To set a transaction level it can be done like:
+		\beingSQL
+		 SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+		\end{lstlisting}
+		DISCLAIMER: if dirty reads are allowed the default is read only and not read write.
 	\section{Design theory for Relational Databases}
 		\subsection{Functional dependencies}
 			A functional dependecy is defined as:
@@ -368,4 +412,118 @@
 				The object oriented approach, makes every possible schema combination according to the isa object.\\
 				The null approach creates a schema with all attributes, from every set in the isa. Then null values are made when the object is parent etc.\\
 				The null approach makes queries the most simple and fast, but uses more unused space unlike the object orented approach which has only one tuble for every entry with no nulls, but many schemas.
-				\end{document}
+	\section{Stored Procedures}
+		Stored procedures are function in query language.\\
+		They are defined by:\\
+		\beginSQL
+		CREATE PROCEDURE <name> (IN <name> <type>..., OUT <type>)
+			.
+			.
+			.
+		\end{lstlisting}
+		In case of a return is is:
+		\beginSQL
+		CREATE PROCEDURE <name> (<params>) RETURN <type>
+		\end{lstlisting}
+		The body of the procedure can be SQL commands and other forms of command listed below.
+		\subsection{Variables}
+			Variables are done by:
+			\beginSQL
+			DECLARE <name> <type>;
+			SET <name> = <expression>;
+	 		\end{lstlisting}
+		\subsection{Procedure calls}
+			\beginSQL
+			CALL <name>(<params>);
+ 			\end{lstlisting}
+		\subsection{If statements}
+			If statements are build up in the following form:
+			\beginSQL
+			IF <condition> THEN
+			...
+			ELSEIF <condition> THEN
+			...
+			ELSE
+			...
+			END IF;
+ 			\end{lstlisting}
+			Where conditions are done through sql queries like NOT EXISTS and COUNT.
+		\subsection{Cursor}
+			A cursor is a query which points towardsa a DB and can be used to fetch tubles.\\
+			\beginSQL
+			DECLARE <name> CURSOR FOR SELECT <attributes> FROM <DB> WHERE ... 
+			\endSQL
+		\subsection{Loop}
+			The loop in itself is really simple consisting of:
+			\beginSQL 
+			<label>: LOOP
+				...
+			END LOOP;
+	 		\end{lstlisting}
+			As seen there is no guard so therefore an if condition is done itself to leave the loop.\\
+			The most common use case is looping through a DB, to create a leave if a variable is used for when a cursor hits the end:
+			\beginSQL
+			DECLARE Not_Found CONDITION FOR SQLSTATE '02000';
+			\end{lstlisting}
+			Where 02000 is a SQL state representing null in a select.\\
+			So a loop which exit when a cursor hits the end is:
+			\beginSQL
+			DECLARE age INTEGER;
+			<label>: LOOP
+				FETCH FROM <cursorVariable> INTO age;
+				IF Not_Found THEN LEAVE <label> END IF;
+				...
+			END LOOP;
+ 			\end{lstlisting}
+		\subsection{For loops}
+			For loops are used for cursors on tables. For loops can here help by declaring the cursor and the assigned attribute variables itself.\\
+			\beginSQL
+			FOR <loop name> AS <cursor name> CURSOR FOR <query>
+			DO
+			...
+			END FOR;
+ 			\end{SQL}
+			Here in the query the attributes listed after the select are the variable names used in the do.\\
+		\subsection{Exception handlers}
+			In case of an exception in a given block of code, an exception handler can be used.\\
+			A code block starts with BEGIN the code and then END.\\
+			A handler cosist of 
+			\beginSQL
+				DECLARE $<$where to go$>$ HANDLER FOR $<$condition list$>$ $<$statement$>$
+			\end{lstlisting}
+			The where to go can be 3 options which determine the outcome after executing the statement:\\
+			CONTINUE - continues execution after the line which gave exception\\
+			EXIT - exits the code block\\
+			UNDO - exits the code block and revert changes from code block in DB\\
+			An example for a handler can be:
+			\beginSQL
+			DECLARE Too$\_$Many CONDITION FOR SQLTATE '21000';
+			BEGIN
+				DELCARE EXIT HANDLER FOR Too$\_$Many RETURN NULL;
+				...
+			END;
+	\section{Call-level Interface}
+		When working with a DB, a high level language is used to connect and communicate.\\
+		A CLI here provides an envirement for the DB, a connection to the DB, and a way to create statements.\\
+		\subsection{JDBC}
+			JDBC is a Java CLI, to create a connection the following can be done:
+			\begin{lstlisting}[language=Java]
+import java.sql.*;
+
+Class.forName("org.postgresql.Driver"); //For postsql envirement
+String url = "jdbc:postgresql://" + host + "[:" + port + "]/" + database;
+
+Connection myCon = DriverManager.getConnection(URL, username, password);
+Statement stat = myCon.createStatement("SELECT...");
+ResultSet res = stat.executeQuery();
+Statement stat2 = myCon.createStatement();
+stat2.executeUpdate("INSERT...");
+while(res.next()) {
+	int resInt = rest.getInt(1); //if the tuble is (name, age, sex) it would return the int age
+	String resString = rest.getString(0);
+}
+			\end{lstlisting}
+			DISCLAIMER:\\
+			Don't reuse statements due to closing.\\
+			Use myCon.setAutoCommit(false); such myCon.commit() and myCon.rollBack() can be used.
+\end{document}

@@ -51,3 +51,13 @@
 \contentsline {subsubsection}{\numberline {9.5.a}Straigt E/R model}{15}{subsubsection.9.5.1}%
 \contentsline {subsubsection}{\numberline {9.5.b}The object oriented}{15}{subsubsection.9.5.2}%
 \contentsline {subsubsection}{\numberline {9.5.c}The null method}{15}{subsubsection.9.5.3}%
+\contentsline {section}{\numberline {10}Week}{15}{section.10}%
+\contentsline {subsubsection}{\numberline {10.0.a}Given speed and RAM, find PC's model number}{15}{subsubsection.10.0.1}%
+\contentsline {subsubsection}{\numberline {10.0.b}Given a model number, remove the tuble}{16}{subsubsection.10.0.2}%
+\contentsline {subsubsection}{\numberline {10.0.c}Decrease price of PC to 100 given mode}{16}{subsubsection.10.0.3}%
+\contentsline {subsubsection}{\numberline {10.0.d}Given all info for a PC check if model number exist if not insert}{16}{subsubsection.10.0.4}%
+\contentsline {subsubsection}{\numberline {10.0.e}Ask the for a price and print maker, model and speed of PC}{16}{subsubsection.10.0.5}%
+\contentsline {subsubsection}{\numberline {10.0.f}Ask for minimum speed,RAM, hdd and screen, and print all compatible laptops plus maker}{17}{subsubsection.10.0.6}%
+\contentsline {subsection}{\numberline {10.1}Write OSN procedues for the following tasks}{18}{subsection.10.1}%
+\contentsline {subsubsection}{\numberline {10.1.a}Given name of a movie studio return net worth of president}{18}{subsubsection.10.1.1}%
+\contentsline {subsubsection}{\numberline {10.1.b}Given name and address, return 1 if movie star, 2 if executive producer, 3 if non, 4 if both}{18}{subsubsection.10.1.2}%

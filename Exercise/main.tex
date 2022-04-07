@@ -321,8 +321,141 @@
 				\subsubsection{The null method}
 					The same Depts and Given by but...\\
 					LabCourses(number primary, room, computerAllo)
+	\section{Week}
+		\subseciton{Create the following functions in Java}
+			The functions are used on:\\
+			Product(maker, model, type)\\
+			PC(model, speed, ram, hd, price)
+			\subsubsection{Given speed and RAM, find PC's model number}
+				\begin{lstlisting}[language=Java]
+import java.sql.*;
 
-				
+Class.forName("org.postgresql.Driver"); //For postsql envirement
+String url = "jdbc:postgresql://" + host + "[:" + port + "]/" + database;
+Connection myCon = DriverManager.getConnection(URL, username, password);
+
+public static ArrayList<String> findModel(int speed, int ram) {
+	Statement stat = myCon.createStatement("SELECT model FROM PC WHERE speed =" + speed + " AND ram =" +ram);
+	ResultSet res = stat.executeQuery();
+	ArrayList<String> models = new ArrayList<>();
+	while(res.next()) 
+		models.add(res.getString(0));
+	return models;
+}	
+\end{lstlisting}
+			\subsubsection{Given a model number, remove the tuble}
+				\begin{lstlisting}[language=Java]
+public static void removeModel(String model) {
+	Statement stat = myCon.createStatement();
+	stat.executeUpdate("REMOVE FROM PC WHERE model ='" +model+"'");
+	Statement stat2 = myCon.createStatement();
+	stat2.executeUpdate("REMOVE FROM Products WHERE model ='" +model+"'");
+	myCon.commit();
+}
+				\end{lstlisting}
+			\subsubsection{Decrease price of PC to 100 given mode}
+				\begin{lstlisting}[language=Java]
+public static void updatePrice(String model) {
+	Statement stat = myCon.createStatement();
+	stat.executeUpdate("UPDATE PC SET price=100 WHERE model ='" +model+"'");
+	myCon.commit();
+}
+				\end{lstlisting}
+			\subsubsection{Given all info for a PC check if model number exist if not insert}
+				\begin{lstlisting}[language=Java]
+public static void tryInsert(String model, int speed, int ram, int hd, int price) {
+	Statement stat = myCon.createStatement("SELECT model FROM PC WHERE model='"+model+"'");
+	ResultSet res = stat.executeQuery();
+	if(res != null) {
+		System.out.println("Model already exist");
+		return
+	}
+	Statement stat = myCon.createStatement();
+	stat.executeUpdate("INSERT INTO PC VALUES('"+model+"',"+speed+","+ram+","+hd+","+price+")");
+}	myCon.commit();
+				\end{lstlisting}
+			\subsubsection{Ask the for a price and print maker, model and speed of PC}
+				\begin{lstlisting}[language=Java]
+import java.util.Scanner;
+Scanner sc = new Scanner(System.in);
+
+public static void closestPrice() {
+	System.out.println("Wanted price?");
+	int wantedPrice = sc.nextInt();
+	int closestPrice = 0;
+	String closestModel;
+	Statement stat = myCon.createStatement("SELECT price, model FROM PC");
+	ResultSet res = stat.executeQuery();
+	while(res.next()) {
+		int price = res.getInt(0);
+		if(Math.abs(wantedPrice - closestPrice) > Math.abs(wantedPrice - price)) {
+			closestPrice = price;
+			model = res.getString(1);
+		}
+	}
+	Statement stat2 = myCon.createStatement("SELECT maker FROM Products WHERE model = '"+model+"'");
+	String maker = stat2.executeQuery().getString(0);
+	System.out.println("The closest PC to the price is: "+ model + " by " + maker + " for the price of " + closestPrice);
+}
+				\end{lstlisting}
+			\subsubsection{Ask for minimum speed,RAM, hdd and screen, and print all compatible laptops plus maker}
+				\begin{lstlisting}[language=Java]
+public static void findLaptop() {
+	System.out.println("Wanted speed, RAM, hdd size and screen size?");
+	int speed = sc.nextInt();
+	int ram = sc.nextInt();
+	int hdd = sc.nextInt();
+	int screen = sc.nextInt();
+	Statement stat = myCon.createStatement("SELECT * FROM PC");
+	ResultSet res = stat.executeQuery();
+	while(res.next()) {
+		int PCSpeed = res.getInt(1);
+		int PCRam = res.getInt(2);
+		int PCHd = res.getInt(3);
+		int PCScreen = rest.getInt(4);
+		if(PCSpeed > speed && PCRam > ram && PCHd > hdd && PCScreen > screen) {
+			String model = rest.getString(0);
+			Statement stat2 = myCon.createStatement("SELECT maker FROM Product WHERE model='"+model"'");
+			String maker = stat2.executeQuery().getString(0);
+			System.out.println("The model: "+model+" by "+maker+" has speed: "+PCSPeed+" RAM: "+PCRAM+" HDD: "+PCHd+" price: "res.getInt(5));
+		}
+	}
+}
+				\end{lstlisting}
+		\subsection{Write OSN procedues for the following tasks}
+			MovieStar(name, address, gender, birtdate)\\
+			MovieExec(name, address, cert\#, netWorth)\\
+			Studio(name, address, presC\#)
+			\subsubsection{Given name of a movie studio return net worth of president}
+				\beginSQL
+CREATE PROCEDURE netWorth(IN studio CHAR(15), OUT worth INT)
+DECLARE foundWorth INTEGER;
+BEGIN
+	SET worth = 0;
+	set foundWorth = SELECT netWorth FROM MovieExec WHERE cert# = (SELECT presC# FROM Studio WHERE name = studio);
+	SET worth = worth + foundWorth;
+END;
+				\end{lstlisting}
+			\subsubsection{Given name and address, return 1 if movie star, 2 if executive producer, 3 if non, 4 if both}
+				\beginSQL
+CREATE PROCEDURE title(IN n CHAR(15),IN a CHAR(15), OUT INT)
+DECLARE star INTEGER;
+DECARE prod INTEGER;
+BEGIN
+	SET star = SELECT COUNT(name) FROM MovieStar WHERE name = n AND address = a;
+	SET prod = SELECT COUNT(name) FROM MovieExec WHERE name = n AND address = a;
+	IF(1 <= star AND 1<= prod)
+		return 4;
+	ELSEIF (1 <= star)
+		return 1;
+	ELSEIF (1 <= prod)
+		return 2;
+	ELSE
+		return 3;
+	END IF;
+END;
+				\end{lstlisting}
+			
 \end{document}
 
 

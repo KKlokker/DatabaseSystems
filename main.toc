@@ -1,28 +1,39 @@
-\contentsline {section}{\numberline {1}Database introduction}{3}{section.1}%
-\contentsline {subsection}{\numberline {1.1}Query compiler}{3}{subsection.1.1}%
-\contentsline {subsection}{\numberline {1.2}Transaction manager}{4}{subsection.1.2}%
-\contentsline {section}{\numberline {2}The relational model of data}{4}{section.2}%
-\contentsline {subsection}{\numberline {2.1}The semistructured-data model}{4}{subsection.2.1}%
-\contentsline {subsection}{\numberline {2.2}Document Type Definition model}{5}{subsection.2.2}%
-\contentsline {subsection}{\numberline {2.3}The basics of relational database}{5}{subsection.2.3}%
-\contentsline {subsection}{\numberline {2.4}SQL language}{6}{subsection.2.4}%
-\contentsline {subsubsection}{\numberline {2.4.1}Keys}{6}{subsubsection.2.4.1}%
-\contentsline {section}{\numberline {3}Algebraic Query Language}{7}{section.3}%
-\contentsline {subsection}{\numberline {3.1}Examples}{8}{subsection.3.1}%
-\contentsline {section}{\numberline {4}Design theory for Relational Databases}{8}{section.4}%
-\contentsline {subsection}{\numberline {4.1}Functional dependencies}{8}{subsection.4.1}%
-\contentsline {subsubsection}{\numberline {4.1.1}Keys}{9}{subsubsection.4.1.1}%
-\contentsline {subsubsection}{\numberline {4.1.2}Closures}{9}{subsubsection.4.1.2}%
-\contentsline {section}{\numberline {5}Designing a Database}{9}{section.5}%
-\contentsline {subsection}{\numberline {5.1}Anomalies}{9}{subsection.5.1}%
-\contentsline {subsection}{\numberline {5.2}Boyce-Codd Normal Form}{9}{subsection.5.2}%
-\contentsline {subsubsection}{\numberline {5.2.1}Decompositiong with 3NF}{10}{subsubsection.5.2.1}%
-\contentsline {subsection}{\numberline {5.3}Valid decompose}{10}{subsection.5.3}%
-\contentsline {section}{\numberline {6}High-level DB models}{11}{section.6}%
-\contentsline {subsection}{\numberline {6.1}Multiplicity of ER models}{11}{subsection.6.1}%
-\contentsline {subsection}{\numberline {6.2}Subclasses in ER models}{11}{subsection.6.2}%
-\contentsline {subsection}{\numberline {6.3}Designing a model}{12}{subsection.6.3}%
-\contentsline {subsection}{\numberline {6.4}Keys in ER models}{12}{subsection.6.4}%
-\contentsline {subsection}{\numberline {6.5}Constraints}{12}{subsection.6.5}%
-\contentsline {subsection}{\numberline {6.6}Converting from ER diagram to DB model}{12}{subsection.6.6}%
-\contentsline {subsubsection}{\numberline {6.6.1}isa objects}{13}{subsubsection.6.6.1}%
+\contentsline {section}{\numberline {1}Database introduction}{4}{section.1}%
+\contentsline {subsection}{\numberline {1.1}Query compiler}{4}{subsection.1.1}%
+\contentsline {subsection}{\numberline {1.2}Transaction manager}{5}{subsection.1.2}%
+\contentsline {section}{\numberline {2}The relational model of data}{5}{section.2}%
+\contentsline {subsection}{\numberline {2.1}The semistructured-data model}{5}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Document Type Definition model}{6}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}The basics of relational database}{6}{subsection.2.3}%
+\contentsline {subsection}{\numberline {2.4}SQL language}{7}{subsection.2.4}%
+\contentsline {subsubsection}{\numberline {2.4.1}Keys}{7}{subsubsection.2.4.1}%
+\contentsline {section}{\numberline {3}Algebraic Query Language}{8}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Examples}{9}{subsection.3.1}%
+\contentsline {section}{\numberline {4}Transaction}{9}{section.4}%
+\contentsline {section}{\numberline {5}Design theory for Relational Databases}{10}{section.5}%
+\contentsline {subsection}{\numberline {5.1}Functional dependencies}{10}{subsection.5.1}%
+\contentsline {subsubsection}{\numberline {5.1.1}Keys}{11}{subsubsection.5.1.1}%
+\contentsline {subsubsection}{\numberline {5.1.2}Closures}{11}{subsubsection.5.1.2}%
+\contentsline {section}{\numberline {6}Designing a Database}{11}{section.6}%
+\contentsline {subsection}{\numberline {6.1}Anomalies}{11}{subsection.6.1}%
+\contentsline {subsection}{\numberline {6.2}Boyce-Codd Normal Form}{12}{subsection.6.2}%
+\contentsline {subsubsection}{\numberline {6.2.1}Decompositiong with 3NF}{12}{subsubsection.6.2.1}%
+\contentsline {subsection}{\numberline {6.3}Valid decompose}{12}{subsection.6.3}%
+\contentsline {section}{\numberline {7}High-level DB models}{13}{section.7}%
+\contentsline {subsection}{\numberline {7.1}Multiplicity of ER models}{13}{subsection.7.1}%
+\contentsline {subsection}{\numberline {7.2}Subclasses in ER models}{14}{subsection.7.2}%
+\contentsline {subsection}{\numberline {7.3}Designing a model}{14}{subsection.7.3}%
+\contentsline {subsection}{\numberline {7.4}Keys in ER models}{14}{subsection.7.4}%
+\contentsline {subsection}{\numberline {7.5}Constraints}{15}{subsection.7.5}%
+\contentsline {subsection}{\numberline {7.6}Converting from ER diagram to DB model}{15}{subsection.7.6}%
+\contentsline {subsubsection}{\numberline {7.6.1}isa objects}{15}{subsubsection.7.6.1}%
+\contentsline {section}{\numberline {8}Stored Procedures}{15}{section.8}%
+\contentsline {subsection}{\numberline {8.1}Variables}{16}{subsection.8.1}%
+\contentsline {subsection}{\numberline {8.2}Procedure calls}{16}{subsection.8.2}%
+\contentsline {subsection}{\numberline {8.3}If statements}{16}{subsection.8.3}%
+\contentsline {subsection}{\numberline {8.4}Cursor}{16}{subsection.8.4}%
+\contentsline {subsection}{\numberline {8.5}Loop}{16}{subsection.8.5}%
+\contentsline {subsection}{\numberline {8.6}For loops}{16}{subsection.8.6}%
+\contentsline {subsection}{\numberline {8.7}Exception handlers}{17}{subsection.8.7}%
+\contentsline {section}{\numberline {9}Call-level Interface}{17}{section.9}%
+\contentsline {subsection}{\numberline {9.1}JDBC}{17}{subsection.9.1}%
