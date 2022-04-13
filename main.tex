@@ -461,7 +461,7 @@
 			$$\{A_1,A_2,...,A_n\}$$
 			Here the attributes are part of the key.\\
 			\textbf{Superkey}: A set of attributes of which one is a key.\\
-			Some uses the terminology where key is not minimal and candidate key is minimal.\\
+			Another terminoligy which is often used is: A candidate key is a possible minimal key and a superset of that key is a non minmal key.
 		\subsubsection{Closures}
 				  A closure for the attribute $A$, is all attributes, which can be computed from which $\{A\}^+\rightarrow \{A,B,C\}$, from the singletons $A\rightarrow B$ and $B\rightarrow C$\\
 				  The closure is found by starting with the trivial, then FD's which include the derived attributes is inserted until no more informations from FD's can be added.\\
@@ -474,22 +474,55 @@
 			The can lead to lost of data, if repeated data turns out to be the last data when deleted or non updated values for all repeated data.\\
 			To prevent this decomposing relations can be done\\
 			This is where all the repeated data is in one relation, and the none repated attribute is in another relation with key also.\\
+		\subsection{Normalizations}
+			Normalizations are design constraints upon a database schema. The constraints come in different layers with the higher layer the more costraints which must be met likewise ealier layer constraints.
+			\subsubsection{1NF.}
+				The first nomal form states:
+				\begin{itemize}
+					\item Eliminate repeating groups in individual tables.
+					\item Create a separate table for each set of related data.
+					\item Identify each set of related data with a primary key.
+				\end{itemize}
+				In other words, an attribute in a table should be atomic.\\
+				For example an employee table with employee data, should not include an attributes or multiple attributes of monthly payments, rather a table with employee and a payment should be made.
+			\subsubsection{2NF.}
+				The second nomal form states: A non-prime attribute (an attribute which does not belong to any possible key) can not depend on part of a possible key.\\
+				That means in a function dependency $A\rightarrow B$ if $A$ is part of a candidate key, $B$ must also be part of a candidate key.\\
+				In more nonformal terms:
+				\begin{itemize}
+					\item Create separate tables for sets of values that apply to multiple records.
+  					\item  Relate these tables with a foreign key.
+				\end{itemize}
+				An example of this is if a value in one table has a group which it belongs. For example a table which include yearly earning which is based on another attribute the amount of years worked.\\
+				This table should not include the yearly earning but rather a seperate table should exists with years worked and yearly earning, where the year is a foreign key connecting the tables.
+			\subsubsection{3NF.}
+				The third normal form builds upon 2NF, but adds that an attribute not part of the key can not relate to an attribute which neither is part of a key.\\
+				This means that all attributes in a table should relate to the key.\\
+				Here functional dependencies come into play, due to it saying that in a table all functional depencies should be from the key to the attributes.\\
+				In case of an attribute $A$ depending on an attribute $B$ a new table should be made such $A$ can be a key and $B$ can be removed from the first table and putted into the new table. 			
 		\subsection{Boyce-Codd Normal Form}
-			To decompose the relation Boyce-Codd Normal form (BCNF) is used.\\
-			This is a rule which states, that for all FD's in the relations the left sides should be part of the super key.\\
-			So the the relation $R(A,B,C)$ with the FD's $A\rightarrow B$ and $A\rightarrow C$, will $A$ be the super key.\\
-			This relation will therefore be decomposible into two relations $R(A,B)$ and $R(A,C)$.\\
+			BCNF is a constraint upon 3NF due to a loophole in the definition. In a table with possible keys such every attribute is part of a key will be in 3NF. \\
+			For example the table with Products(ReleaseYear, Name, Popularity, ReleaseYearAndMonth).\\
+			This table has the possible keys:
+			\begin{itemize}
+				\item $\{Name\}$
+				\item $\{RelearYear, Ranking\}$
+				\item $\{ReleaseYearAndMonth, Ranking\}$
+			\end{itemize}
+			This table is in 3NF but anomalies can result if year is updated but not year and month.\\[4mm]
+			BCNF therefore states: A functional dependency in a table must depend on a possible key (not minimal), with exception of the trivial dependency.\\
+			Therefore the example is not BCNF due to $ReleaseYearAndMonth \rightarrow ReleaseYear$ and ReleaseYearAndMonth is not a key by itself. \\[4mm]
 			It can here be noted that, transitive relations may be used.\\
 			Example the relation $R(A,B,C,D)$ with the FD's $A\rightarrow B$, $B\rightarrow C$ and $B\rightarrow D$.\\
 			It can here be seen $A$ is the key due to being the only attribute from which all other attributes can be found.\\
 			Therefore the relation can be described in two relations $R(A,B)$,$R(B,C,D)$. Here BCNF will hold.\\
-			Performing a decompose of $R$ using $X\rightarrow Y$, is done by having $R_1=X^+$ and $R_2=R-(X^+-X)$\\
-			The third normal form is a modification of BCNF where the FD $X\rightarrow A$ is only a violation if $X$ is not a superkey and $A$ is prime (member of a key).\\
-			3NF can be smart due to it will always preserve FD's, which BCNF does not gurantee.
-			\subsubsection{Decompositiong with 3NF}
-				First all FD's are splitted. Then the FD's are simplified or removed if repeated.\\
-				Then the candidate key is all, keys on the right of the FD's clousing sets.\\
-				The relations will then be the simplified / minmal basis of FD's.
+			\subsubsection{Decomposing a relation into BCNF}
+				First check if the relation $R$ is in BCNF if so return $R$.\\[4mm]
+				Let the violation be $X\rightarrow Y$, then compute $X^+$ and choose $R_1=X^+$, and $R_2$ have $X$ and all attributes not in $X^+$.\\[4mm]
+				Compute funcitonal dependencies in the two relations by:\\
+				For all attributes in the relation $X$ calculate $X^+$  and add all functional dependencies of which $X\rightarrow A$ and $A$ is in $X^+$ and in the given relation.\\
+				Then remove all redundant dependencies, if $\{Y,Z\}\rightarrow B$ and two FD's is $P\rightarrow Y$ and $P\rightarrow B$ then, the only needed FD is $P\rightarrow B$.\\
+				Using this method find the functional dependencies for $R_1$ and $R_2$ and go through this algorithm again with each.
 		\subsection{Valid decompose}
 			A measure if the decomposition is correct, is if when the natural join is performed on the given decomposed relations, we shall get the original relation back with the same number of tuples and correct tuples.\\
 			The case method, consist of writing a tablau, with a row representing a decomposed relation. Then the row is filled with know values and unknown valeus are subscribted with the row number.\\
