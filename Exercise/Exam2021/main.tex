@@ -1,0 +1,284 @@
+\documentclass[12pt, a4paper]{article}
+\usepackage{caption}
+\usepackage{graphicx}
+\usepackage{svg}
+\usepackage{listings}
+\usepackage{siunitx}
+\usepackage{hyperref}
+\def\checkmark{\tikz\fill[scale=0.4](0,.35) -- (.25,0) -- (1,.7) -- (.25,.15) -- cycle;}
+\usepackage{tikz-network}
+\hypersetup{
+    colorlinks,
+    citecolor=black,
+    filecolor=black,
+    linkcolor=black,
+    urlcolor=black
+}
+\usepackage{amsmath, amsfonts, amssymb, amsthm}
+\renewcommand{\thesubsubsection}{\thesubsection.\alph{subsubsection}}
+
+
+\usepackage{xcolor,listings}
+\usepackage{textcomp}
+\usepackage{color}
+\usepackage{listings}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{HTML}{C42043}
+\definecolor{backcolour}{HTML}{F2F2F2}
+\definecolor{bookColor}{cmyk}{0,0,0,0.90}  
+\color{bookColor}
+
+\lstset{upquote=true}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{codepurple},
+    numberstyle=\numberstyle,
+    stringstyle=\color{codepurple},
+    basicstyle=\footnotesize\ttfamily,
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbers=left,
+    numbersep=10pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=3,
+}
+\lstset{style=mystyle}
+\usepackage{zref-base}
+
+\makeatletter
+\newcounter{mylstlisting}
+\newcounter{mylstlines}
+\lst@AddToHook{PreSet}{
+  \stepcounter{mylstlisting}
+  \ifnum\mylstlines=1\relax
+    \lstset{numbers=none}
+  \else
+    \lstset{numbers=left}
+  \fi
+  \setcounter{mylstlines}{0}
+}
+\lst@AddToHook{EveryPar}{
+  \stepcounter{mylstlines}
+}
+\lst@AddToHook{ExitVars}{
+  \begingroup
+    \zref@wrapper@immediate{
+      \zref@setcurrent{default}{\the\value{mylstlines}}
+      \zref@labelbyprops{mylstlines\the\value{mylstlisting}}{default}
+    }
+  \endgroup
+}
+
+\newcommand*{\mylstlines}{
+  \zref@extractdefault{mylstlines\the\value{mylstlisting}}{default}{0}
+}
+\makeatother
+
+
+\newcommand\numberstyle[1]{
+    \footnotesize
+    \color{codegray}
+    \ttfamily
+    \ifnum#1<10 0\fi#1 |
+}
+
+\newcommand{\beginSQL}{\begin{lstlisting}[ language=SQL,
+                    deletekeywords={IDENTITY},
+                    deletekeywords={[2]INT},
+                    morekeywords={clustered},
+                    framesep=8pt,
+                    xleftmargin=40pt,
+                    framexleftmargin=40pt,
+                    frame=tb,
+                    framerule=0pt ]}
+
+\title{Algorithms and datastructures\\Exercises}
+\date{2022}
+\author{Kristoffer Fischer Klokker\\ 16/08/02\\ krklo21}
+\begin{document}
+	\maketitle
+	\clearpage
+	\tableofcontents
+	\clearpage
+	\section{From E/R diagram til reltional model}
+		\subsection{The relational schemata must be created using the E/R-style translation}
+			Song(\underline{title},year,EnteredBy)\\
+			Country(\underline{name},\underline{title})\\
+			PopularIn(\underline{title},\underline{name})\\
+			RockBallad(\underline{title},guitarSolo,hairLength)\\
+			PopSong(\underline{title},autotune)\\[4mm]
+			Each set needs it own schema, to ensure an object wil fitt into the model. The entered by relation is joined in the song schema, due to it must be entered by a country in order to be in the database. Whereas a a country's most popular song may not be entered and therefore be null.
+		\subsection{The relational schemata must be created using the object-oriented translation}
+			Song(\underline{title},year,enteredBy)\\
+			Country(\underline{name})\\
+			PopularIn(\underline{title},\underline{name})\\
+			RockBallad(\underline{title},year,guitarSolo,hairLength)\\
+			PopSong(\underline{title},year,autotune)\\
+			PopRockBallad(\underline{title},year,guitarSolo,autotune,enteredBy)\\[4mm]
+			Here the same argument goes for joining the enteredRelation but not the popular relation. No schema are able to be joined otherwise, due none of the attributes matching.
+		\subsection{The relational schemata must be created using the null translation}
+			Song(\underline{title},year,guitarSolo,hairLength,autotune,enteredBy)\\
+			Country(\underline{name},popularSong)\\[4mm]
+			Here it can be joined into two schemas, the relations are joined into the schemas and the ISA's are joined into the Song schema.\\
+			The Country and Song schema was not joined due to it would create redundency, when a country had multiple popular songs.
+		\subsection{Write CREATE TABLE statements for the second translation (b), namely for theobject-oriented translation}
+			\beginSQL
+CREATE TABLE Song(
+	title VARCHAR(20) PRIMARY KEY,
+	year int,
+	enteredBy VARCHAR(20)
+);
+CREATE TABLE Country(
+	name VARCHAR(20) PRIMARY KEY
+);
+CREATE TABLE PopularIn(
+	title VARCHAR(20) REFERENCES Song(title),
+	name VARCHAR(20)  REFERENCES Country(name)
+);
+CREATE TABLE RockBallad(
+	title VARCHAR(20) PRIMARY KEY,
+	year INT,
+	guitarSolo BOOLEAN,
+	hairLength INT
+);
+CREATE TABLE PopSong(
+	title VARCHAR(20) PRIMARY KEY,
+	year INT,
+	autotune BOOLEAN
+);
+CREATE TABLE RockBalladPopSong(
+	title VARCHAR(20) PRIMARY KEY,
+	year INT,
+	guitarSolo BOOLEAN,
+	hairLength INT,
+	autotune BOOLEAN
+);
+)\end{lstlisting}
+		\subsection{How would the translation (a) change if there was another ISA relationship connecting to the entity Love song with the same attributes, as Rock ballad?}
+			It would depend upon how important it is to know the song genre. If the genre is not important it would not change due the ability of joining it with Rock ballad. If the genre is important we would loose that information and therefore a schema would be added: LoveSong(\underline{title},guitarSolo,hairLength)\\
+	\section{SQL queries}
+		\subsection{Write an SQL SELECT query (without subqueries), which lists theEduNames thatgot a timeslot in theafternoon}
+			\beginSQL
+SELECT EduName FROM educations,timeslots WHERE Timeslot = 'afternoon' AND educations.EduID = timeslots.EduId; \end{lstlisting}
+		\subsection{Write an SQL SELECT query (without subqueries), which lists the total numberofGroups that got a timeslot in themorning}
+			\beginSQL
+SELECT SUM(groups) FROM educations,timeslots WHERE Timeslot = 'morning' AND educations.EduID = timeslots.EduId;\end{lstlisting}
+		\subsection{Write an SQL SELECT query with subqueries, which lists allEduIDs that didnotget any timeslot at all}
+			\beginSQL
+SELECT EduID FROM educations WHERE EduID NOT IN(SELECT EduID FROM timeslots)\end{lstlisting}
+		\subsection{Write  an  SQL  SELECT  query,  which  lists  first  all  morning  slots  with  the  corre-sponding educaton IDs and the education names (in alphabetic order) followed byall afternoon slots with the corresponding educations (in alphabetic order).}
+			\beginSQL
+SELECT EduId, EduName FROM (timeslots INNER JOIN educations USING (EduID)) ORDER BY Timeslot DESC, EduName \end{lstlisting}
+		\subsection{Write an SQL SELECT query, which lists all the EduNames that have gotten time-slots both in the morning and in the afternoon}
+			\beginSQL
+SELECT EduName FROM educations WHERE EduId IN(SELECT EduId FROM (timeslots INNER JOIN timeslots AS timeslots2 USING (EduID)) WHERE timeslots.Timeslot = 'morning' AND timeslots2.Timeslot = 'afternoon');\end{lstlisting}
+	\section{Relational algebra}
+\begin{minipage}{0.45\textwidth}
+\centering	
+\begin{tabular}{|l|l|l|}
+\hline
+A & B  & C \\ \hline
+1 & 2 & 3 \\ \hline
+9 & 3 & 8 \\ \hline
+4 & 7 & 1 \\ \hline
+\end{tabular}\\[4mm]
+R
+\end{minipage}
+\begin{minipage}{0.45\textwidth}
+\centering	
+\begin{tabular}{|l|l|l|}
+\hline
+A & B & D \\ \hline
+2 & 3 & 1\\ \hline
+3 & 1 & 3\\ \hline
+5 & 3 & 4\\ \hline
+\end{tabular}\\[4mm]
+S
+\end{minipage}
+		\subsection{For each of the following expressions, give the resulting relation as a table similarto the ones for R and S above.}
+			\subsubsection{$\sigma_{A>D}(S)$}
+				\begin{table}[h!]
+				\begin{tabular}{|l|l|l|}
+				\hline
+				A & B & D \\ \hline
+				2 & 3 & 1\\ \hline
+				5 & 3 & 4\\ \hline
+				\end{tabular}
+				\end{table}
+			\subsubsection{$\Pi_{A,B}(R)\cap \Pi_{D,A}(S)$}
+				This will be empty due to the non matching attributes.
+			\subsubsection{$S\bowtie R$}
+				Empty				
+			\subsubsection{$\sigma_{S.B<C}(S\times R)$}
+				\begin{table}[h!]
+				\begin{tabular}{|l|l|l|l|l|l|}
+				\hline
+				S.A & S.B & D & R.A & R.B & C \\ \hline
+				2 & 3 & 1 & 9 & 3 & 8\\ \hline
+				3 & 1 & 3 & 1 & 2 & 3\\ \hline
+				3 & 1 & 3 & 9 & 3 & 8\\ \hline
+				5 & 3 & 4 & 9 & 3 & 8\\ \hline
+				\end{tabular}
+				\end{table}
+			\clearpage
+			\subsubsection{$\gamma_{B,sum(D)}(S)$}
+				\begin{table}[h!]
+				\begin{tabular}{|l|l|}
+				\hline
+				B & SUM(D) \\ \hline
+				3 & 5\\ \hline
+				1 & 3\\ \hline
+				\end{tabular}
+				\end{table}
+		\subsection{For each of the following SQL statements, write an expression of extended relational algebra which is equivalent in its effect to the following SQL statement independentof the actual tuples present in R and S}
+			\subsubsection{SELECT R.A, S.B, C, D FROM R JOIN S ON C = D AND R.A $>$ S.A}
+				$\pi_{R.A,S.B,C,D}(R\bowtie_{C=D \land R.A > S.A}S)$
+			\subsubsection{SELECT DISTINCT A,B FROM R WHERE C = 3 OR B = 3}
+				$\delta(\pi_{A,B}(\sigma_{C=3\lor B=3}(R))$
+	\section{Normalization}
+		Consider the relation\\
+		$$R(MealName,Appetizer,MainCourse,Dessert,Guest,Address)$$
+		with the following functional dependencies:\\
+		$MealName\;\rightarrow\;Appetizer\;MainCourse\;Dessert$\\
+		$MainCourse\;\rightarrow\;MealName$\\
+		$Guest\;\rightarrow\;Address$ 
+		\subsection{List all keys of R and argue why there can be no other keys}
+			$MainCourse\;Guest$\\
+			$Guest,MealName$\\
+			These are the two keys from which all attributes can be found. Other combinations will not result in a full row.
+		\subsection{Show that R is not in BCNF, i.e., show that there is at least one BCNF violation. Decompose R until it is in BCNF. Document the steps of the decomposition process and the resulting relations.}
+			$MealName^+=\{Appetizer\;MainCourse\;Dessert\}$\\
+			$R_1=MealName^+$\\
+			$R_2=\{MealName\;Guest,Address\}$\\
+			$R_1^+=\{\}$\\
+			$R_2^+=\{Appetizer\;MainCourse\;Dessert\}$\\[4mm]
+			Therefore making the final relations:\\
+			$R_1=\{Appetizer\;MainCourse\;Dessert\}$\\
+			$R_2=\{MealName\;Guest,Address\}$
+		\subsection{Analyze whether R is 3NF, if it is, show that there are no 3NF violations.  If it is not, show that there is at least one 3NF violation and decompose R until it is in 3NF using the 3NF synthesis algorithm}
+			The firsst FD 
+			$MealName\;\rightarrow\;Appetizer\;MainCourse\;Dessert$
+			is a violation due to the left side not being a non minal key and the rightside not being part of a key.\\
+			All of the FD's are minimal so that gives us the three relations:\\
+			$R_1=\{MealName,\;Appetizer,\;MainCourse,\;Dessert\}$\\
+			$R_2=\{MainCourse,\;MealName\}$\\
+			$R_3=\{Guest,\;Address\}$\\
+			None of these relations are a non minal key so a fourth relation is added.\\
+			$R_4=\{Guest,\;MealName\}$
+	\section{Indices}
+		\subsection{Write CREATE statements for indices based on the primary keys.}
+			\beginSQL
+CREATE INDEX playerKeyIndex ON players(PlayerID);
+CREATE INDEX gameKeyIndex ON games(WhitePlayerID,BlackPlayerID);\end{lstlisting}
+		\subsection{What indices would you create additionally, if SQL queries of the following type areexecuted much more often than other SQL statements?  Explain your reasoning.}
+			In the case of the select being executed more than manipulations on the schema, a index for Name, NameOfWinningPlayer and Handicap can be used. Then when the select is performed every index can be used such only pointers from each index are left. Then pointers which point to the same rows may be selected.
+\end{document}
+
+

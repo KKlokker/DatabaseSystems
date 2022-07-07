@@ -100,7 +100,7 @@
                     frame=tb,
                     framerule=0pt ]}
 
-\title{Algorithms and datastructures\\Exercises}
+\title{Database- design and programming\\Exercises}
 \date{2022}
 \author{Kristoffer Klokker}
 \begin{document}
@@ -563,13 +563,13 @@
 					StarsIn(movieTitle REFERENCES Movies.title , movieYear, starName)\\		
 				\subsubsection{A star appearing in Starsln must also appear in MovieStar. Handle violations by deleting violating tuples.}
 					StarsIn(movieTitle , movieYear, starName REFERENCES MovieStar.name\\
-						ON DELTE NULL )\\							
+						ON DELETE CASCADE )\\							
 				\subsubsection{The movies can not contain a movie before 1915}
-					Movies(title , year CHECK (year >= 1915), length, genre, studioName, producerC$\#$)\\					
+					Movies(title , year CHECK (year $>$= 1915), length, genre, studioName, producerC$\#$)\\					
 				\subsubsection{The movies can not contain a movie shorter than 60 and longer than 250}
-					Movies(title , year, length CHECK (length > 60 AND 250 > length), genre, studioName, producerC$\#$)\\
+					Movies(title , year, length CHECK (length $>$ 60 AND 250 $>$ length), genre, studioName, producerC$\#$)\\
 				\subsubsection{The movies can only be from Disney, Fox, MGM, or Paramount.}
-					Movies(title , year, length, genre, studioName CHECK(studioName = 'Dinsey' OR studioName = 'MGM' OR studioName = 'Paramount', producerC$\#$)\\
+					Movies(title , year, length, genre, studioName CHECK IN('Dinsey', 'MGM', 'Paramount'), producerC$\#$)\\
 			\subsection{Write the following trigger analoge for insert and delete}	
 				\beginSQL
 CREATE TRIGGER AvgNetWorthTrigger
@@ -577,7 +577,7 @@ AFTER UPDATE OF netWorthON MovieExec
 REFERENCING
 	OLD TABLE AS OldStuff,
 	NEW TABLE AS NewStuff
-FOR EACH STATEMENT
+FOR EACH ROW
 WHEN (500000 > (SELECT AVG(netWorth) FROM MovieExec))
 BEGIN
 	DELETE FROM MovieExec
@@ -590,7 +590,7 @@ END;
 CREATE TRIGGER AvgNetWorthTrigger
 AFTER INSERT OF netWorthON MovieExec
 REFERENCING NEW ROW AS NewTuple
-FOR EACH STATEMENT
+FOR EACH ROW
 WHEN (500000 > (SELECT AVG(netWorth) FROM MovieExec))
 BEGIN
 	DELETE FROM MovieExec
@@ -601,11 +601,11 @@ END;
 CREATE TRIGGER AvgNetWorthTrigger
 AFTER DELETE OF netWorthON MovieExec
 REFERENCING OLD ROW AS DeletedTuple
-FOR EACH STATEMENT
+FOR EACH ROW
 WHEN (500000 > (SELECT AVG(netWorth) FROM MovieExec))
 BEGIN
 	INSERT INTO MovieExec
-		(SELECT * FROM DeletedTuple);
+		DeletedTuple
 END;
 				\end{lstlisting}
 				

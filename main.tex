@@ -125,7 +125,7 @@
 			When a DML command is executed two subsystems are handling the command:
 				\subsection{Query compiler}
 					The compiler takes the query and creates a query plan (a sequence of actions) and passes it the the execution engine.\\
-					A request of data sends data data in tuples to the buffer manager, which is responsible for all data transaction between disk storage and memory\\
+					A request of data sends data in tuples to the buffer manager, which is responsible for all data transaction between disk storage and memory\\
 					The compiler consist of
 					\begin{itemize}
 						\item Query parser - which builds a tree from the textual query
@@ -143,7 +143,7 @@
 						\item I - isolation ofe ach operation done in order in a transaction
 						\item D - durability of data such it is never lost after a transaction
 					\end{itemize}
-	\section{The relational model of data}
+	\section{The models of data}
 		A data model is used for describing data and conisist of:
 		\begin{itemize}
 			\item Structure of data - Referred to as physical data model, but is simply a high level data structure
@@ -152,7 +152,7 @@
 		\end{itemize} 
 		\subsection{The semistructured-data model}
 			The data is setup in a relation more like a tree rather than table.\\
-			Here XML is mostly used to represent datam by nested tags.
+			Here XML is mostly used to represent data by nested tags.
 			\begin{lstlisting}
 <Movies>
 	<Movie title="Gone with the wind">
@@ -189,29 +189,33 @@
 			Relation refers to the two dimensional table of data.With attributes being the coloumns and rows being a tuple. The tuple is then made of an relations where a relation with attributes are a schema. \\
 			A relation is defined by $Name(attribute:type, attribute2: type)$ and a tuple is in the same order and valeis for the given attributes.\\
 			Relations comes in sets and not lists and therefore order is not important\\
-			A database may contain a key which is attribute(s) which define a unique relation, if no combination of attributes are unique a ID for the relation can be created.\\
-		\subsection{SQL language}
-			SQL is the language used to create queries. SQL has tree kinds of relations, stored called tables (relations), views (relation which are not stored but used for computation), temporary tables (tables constructed by SQL temporary)\\
-			The data types avaliable by SQL are:
-			\begin{itemize}
-				\item $CHAR(n)$ - Character string of fixed length $n$
-				\item $BIT$ - Logical value with possible values being TRUE, FALSE, UNKNOWN
-				\item $INT$ - Number can also be $SHORTINT$ for small number
-				\item $FLOAT$ - Higher precision numbers here $DOUBLE$ can also be used for more precision
-				\item $DECIMAL(n,d)$ - Numbers of length $n$ and the decinam placed at $d$
-				\item $DATE$ and $TIME$ - both essentially being strings with a strict format
-			\end{itemize}
-			The basic commands for modifying tables are:
-			\begin{itemize}
-				\item DROP TABLE R; which removes the table $R$ with all its entries
-				\item ALTER TABLE R ADD a type; Adds attribute $a$ as a $type$ to table $R$
-				\item ALTER TALBE R DROP a; Removes the attribute $a$ form table $R$
-			\end{itemize}
-			SQL also has $DEFAULT$ which can be added after any attribute after type and describes the default value if non is given.\\
+			A database may contain a key which is attribute(s) which define a unique relation, if no combination of attributes are unique a ID for the relation can be created.
 			\subsubsection{Keys}
 				A PRIMARY KEY is used for securing no dublicates and only allows non null values in the key attribute.\\
 				UNIQUE allows null as a value in its attribute, but dublicates is still nto allowed.\\
 				When creating a table the key can be choosen by after an attribute after its type $PRIMARY\; KEY$ or $UNIQUE$ is inserted or at the end of the table definition $PRIMARY\; KEY\; (a)$ can be inserted where a are the attributes. Again Unique can also be used like this.
+	\section{SQL language}
+		SQL is the language used to create queries. SQL has tree kinds of relations, stored called tables (relations), views (relation which are not stored but used for computation), temporary tables (tables constructed by SQL temporary)\\
+		The data types avaliable by SQL are:
+		\begin{itemize}
+			\item $CHAR(n)$ - Character string of fixed length $n$
+			\item $BIT$ - Logical value with possible values being TRUE, FALSE, UNKNOWN
+			\item $INT$ - Number can also be $SHORTINT$ for small number
+			\item $FLOAT$ - Higher precision numbers here $DOUBLE$ can also be used for more precision
+			\item $DECIMAL(n,d)$ - Numbers of length $n$ and the decinam placed at $d$
+			\item $DATE$ and $TIME$ - both essentially being strings with a strict format
+		\end{itemize}
+		The basic commands for modifying tables are:
+		\begin{itemize}
+			\item DROP TABLE R; which removes the table $R$ with all its entries
+			\item ALTER TABLE R ADD a type; Adds attribute $a$ as a $type$ to table $R$
+			\item ALTER TALBE R DROP a; Removes the attribute $a$ form table $R$
+		\end{itemize}
+		\subsection{Default}
+			SQL also has $DEFAULT$ which can be added after any attribute after type and describes the default value if non is given.\\
+			When creating a realtion, the default attribute can be used in case of a not given value.\\
+			CREATE TABLE CoolPeople(name CHAR(30) DEFAULT 'Kristoffer Klokker', phone CHAR(16));
+			
 	\section{Algebraic Query Language}
 		The algebraic query langauge is the operation behind the SQL real language.\\
 		This is not a programming language, but the simplicity makes in easier to optimize and faster.\\
@@ -246,7 +250,7 @@
 		It can here be seen that there is multiple combinations which are equal. Here the highest priority readability due to the query compiler rewriting it anyway.\\
 		When writing linear notation be used as such:
 		$$R(a,y,l):=\sigma_{age<18}(People)$$
-		From which $R$ now can be usedas a variable.\\
+		From which $R$ now can be used as a variable.\\
 		Often when combining operationsa tree is used where root is the final product and branches are the first operations done.
 		\subsection{Examples}
 			\begin{minipage}[t]{0.32\textwidth}
@@ -358,9 +362,6 @@
 			Strings are defined by ' therefore when working with them inside a string two ' is used like ''\\
 			Logic operators avaliable is AND, OR and NOT\\
 			Ex. SELECT title, genre FROM Books WHERE author = Kristoffer Klokker AND year = 2022\\
-		\subsection{Default}
-			When creating a realtion, the default attribute can be used in case of a not given value.\\
-			CREATE TABLE CoolPeople(name CHAR(30) DEFAULT 'Kristoffer Klokker', phone CHAR(16));
 		\subsection{Modifying the database}
 			\subsubsection{Insert}
 				INSERT INTO R VALUES (A1,A2..)\\
@@ -368,17 +369,17 @@
 				Alternative INSERT INTO R(Sum,Name) VALUES (A1,A2..), which will insert the value to the corresponding attrubute.\\
 				A1 and A2 can also be a tubles by itself from another DB, for inserting multiple tubles at once.
 			\subsubsection{Deletion}
-				DELETE FROM R WHERE <condition>\\
+				DELETE FROM R WHERE $<$condition$>$\\
 				Delete every tuple in relation R which satifies the condition.\\
 				Remember deletion is not a linear process rather all satifiable tuples will be deleted once all are found.
 			\subsection{Update}
-				UPDATE R SET name = 'Kristofer' WHERE <condition>\\
+				UPDATE R SET name = 'Kristofer' WHERE $<$condition$>$\\
 				Changes attribute value, where the condition is met.
 		\subsection{Rename}
 			In case of a rename of attributes the keywords AS is used, here it is also possible to modify values.\\
-			Ex. SELECT title + ' and the stone' AS name from Books\\
-			COnstants are also avaliable if wanted.\\
-			Ex. SELECT title || ' and the stone' AS name, 'forever' AS readTime from Books\\
+			Ex. SELECT title, ' and the stone' AS name from Books\\
+			Constants are also avaliable if wanted.\\
+			Ex. SELECT title $||$ ' and the stone' AS name, 'forever' AS readTime from Books\\
 		\subsection{Date and time}
 			Dates are defined as: DATE 'year-month-day' Ex: DATE '2022-12-04'\\
 			Times are defined as: TIME 'hour:minut:second' Ex: TIME '19:42:12.55'\\
@@ -397,14 +398,14 @@
 			When negating UNKNOWN the value is UNKNOWN.\\
 			UNKNOWN values will not interpretated as true and queries where the condition result in UNKNOWN will not show up.\\
 		\subsection{Ordering}
-			To order the output of a qeruy the ORDER BY <attributes> is used.\\
+			To order the output of a qeruy the ORDER BY $<$attributes$>$ is used.\\
 			After the attributes list DESC can be added for a descending list whereas ASC is not needed due to ascending being the default.\\
 			Multiple attributes are used in case of a the first attribute being equal then the second attribute is used for ordering.
 		\subsection{Multiple tables}
 			When working with multiple tables the FROM can be filled up with multiple tables.\\
-			Ex. SELECT title, age FROM Books CoolPeople WHERE author = name\\
+			Ex. SELECT title, age FROM Books, CoolPeople WHERE author = name\\
 			In case of the table having the same name or the same table being used an alias can be created by a space after the table followed by the wanted name.\\
-			Ex. SELECT Book1.name, Book2.name FROM Books Book1, Books Book2 WHERE Book1.title = Book2.title AND Book1.name <> Book2.name\\
+			Ex. SELECT Book1.name, Book2.name FROM Books Book1, Books Book2 WHERE Book1.title = Book2.title AND Book1.name $<>$ Book2.name\\
 		\subsection{Union, intersect and except}
 			The relational algebra operation can be used on two SELECT statement to get the expected output.\\
 			Ex. SELECT name FROM Books INTERSECT SELECT name FROM CoolPeople\\
@@ -414,11 +415,11 @@
 			The simplest join is the CROSS join also known as cartesian product Ex. Books CROSS JOIN CoolPeople\\
 			Theta joing the cross product but with a condition is done like cross but with ON and then condition Ex. Books JOIN CoolPeople ON author = name\\
 			Natural join where attributes are matched is done by taking the two tables with NATURAL JOIN between Ex. CoolPeople NATRUAL JOIN SmartPeople\\
-			Outher join is like natural join except instead of throwing away non matching entries they are filled with null Ex. CoolPople NATURAL FULL OUTER JOIN SmartPeople. \\
+			Outer join is like natural join except instead of throwing away non matching entries they are filled with null Ex. CoolPople NATURAL FULL OUTER JOIN SmartPeople. \\
 			This will include all entries from SmartPeople and CoolPeople but if an entry only exists in one the attributes from the other table is fileld with null.\\
 			Variant of LEFT and RIGHT also where left only includes all entries from the left table and only matching from the right Ex. CoolPeople NATURAL LEFT OUTER JOIN SmartPeople.\\
 		 \subsection{Subqueries}
-		 	Subqueries are used for getting a value from a table which then is most often used in a comapre statement or as a table the selection is taken from.\\
+		 	Subqueries are used for getting a value from a table which then is most often used in a compare statement or as a table the selection is taken from.\\
 		 	If a subquery only return one value it is called scalar and can be used in an condition.\\
 		 	Ex SELECT title FROM Books Where author = (SELECT name FROM CoolPeople WHERE key = 3)\\
 		 	In case a subquery return multiple result the following operators can be used:
@@ -426,13 +427,13 @@
 		 		\item EXISTS R - return true if R is not empty
 		 		\item s IN R - return true if s is an entry in R
 		 		\item s ($>$) ALL R - returns true if the math operation here $>$ is true for all entried in R
-		 		\item s ($>$) ANY R - returns true if the math operation here $>$ is true for any entru in R
+		 		\item s ($>$) ANY R - returns true if the math operation here $>$ is true for any entry in R
 			\end{itemize}
 			All the operators can ofcourse be negated by puttin NOT infront.
 		\subsection{Sets}
 			To get a set in a query the DISTINCT is used after the SELECT Ex. SELECT DISTINCT names FROM...\\
 		\subsection{Aggregation operations}
-			This is operations which is done on the while selection.\\
+			This is operations which is done on the selection.\\
 			These operations include: SUM, AVG, MIN, MAX and COUNT.\\
 			Ex. SELECT AVG(age) FROM CoolPeople\\
 			In case of wanting only sets DISTINCT is used as follow SELECT SUM(DISTINCT age) FROM CoolPeople.\\
@@ -486,7 +487,7 @@
 				In other words, an attribute in a table should be atomic.\\
 				For example an employee table with employee data, should not include an attributes or multiple attributes of monthly payments, rather a table with employee and a payment should be made.
 			\subsubsection{2NF.}
-				The second nomal form states: A non-prime attribute (an attribute which does not belong to any possible key) can not depend on part of a possible key.\\
+				The second normal form states: A non-prime attribute (an attribute which does not belong to any possible key) can not depend on part of a possible key.\\
 				That means in a function dependency $A\rightarrow B$ if $A$ is part of a candidate key, $B$ must also be part of a candidate key.\\
 				In more nonformal terms:
 				\begin{itemize}
@@ -682,6 +683,120 @@ END;
 				Then the keys will connect each schema to the other to obtain all information.\\
 				The object oriented approach, makes every possible schema combination according to the isa object.\\
 				The null approach creates a schema with all attributes, from every set in the isa. Then null values are made when the object is parent etc.\\
-				The null approach makes queries the most simple and fast, but uses more unused space unlike the object orented approach which has only one tuble for every entry with no nulls, but many schemas.
-		
+				The null approach makes queries the most simple and fast, but uses more unused space unlike the object orented approach which has only one tuble for every entry with no nulls, but many schemas
+	\section{Storing and indexing tuples}
+		\subsection{Storing}
+			A tuble is stored as a record in the following format:
+			\begin{itemize}
+				\item File header containing: pointer to schema, record length, timestamp of creation.
+				\item Attributes of tuble
+			\end{itemize}
+			Each part stored as a multiple of 4  bytes \\
+			Each record are gathered in a block with a header file in the following format:
+			\begin{itemize}
+				\item Link to one or more blocks for index purpose
+				\item Info about relation which the records belong to
+				\item A "directory" with info about offset of each record in the block
+				\item Timestamp for last modification and/or access
+			\end{itemize}
+			The blocks are then pointed to in the database address space, as either a physical address (location on drive) or a logical address (A map for a drive).\\
+			Most often a combination is used, due to the phiscal address being faster but the logical address being able to moved around and being overall more flexible.\\
+			\subsubsection{Pointer swizzling}
+				Pointer swizzling is a technique for optimizing pointers.\\
+				When a pointer is secondary memory it points to the secondary address of an object. The swizzling then is used when the record is moved into main memory along with the object the pointer is swizzled into pointing at the main memory address.\\
+				So instead of having to translate upon every action on the record with the pointer, the pointer is already translated. This only require an extra bit in the pointer indicating if the pointer is swizzled or not.\\
+				There are two types of swizzling automatic which upon moving the block to main memory every pointer is tried to be swizzled and demand which tries a swizzle once the pointer is used for the first time.\\
+				Once the record is returned to secodnary memory the pointers must be unswizzled.\\
+				This may lead to objects being pinned in main memory until pointers to it has been unswizzled, this is handled through a linked list of pointers such a chain reaction of unswizzling can be done.
+			\subsubsection{Non fixed length of attributes}
+				There are two cases of non-fixed length attributes: non-fixed length variables and repeatable objects.\\
+				For repeatable objects the method is to in the end have an open field from which pointers can be putted, and a header with the amount of pointers. The problem is the non fixed size and therefore a large capazity is reserved. Another alternative is an fixed length of pointers and a pointer to another place with additional pointers if needed. The makes searches faster but reading all pointers is slower due to more I/O calls.\\
+				For non-fixed length variables, they can be used at the end of the record, such the varying size does not affect the fixed sized attributes.\\
+				In case of more flexxible schema such as with XML, each attribute can be used as: a byte for codename, a byte for codename of type, a byte for length of the variable and the variable itself.\\
+			\subsubsection{Variables of size larger than a block}
+				These types of variables span multiple records and each records is called a record fragment.\\
+				The record fragment needs additional header information containing:
+				\begin{itemize}
+					\item A bit representing if the records is a fragment
+					\item A bit if the fragment is the first or the last fragment for its record
+					\item A pointer for the previus fragment or further fragment if existing
+				\end{itemize}
+				An object which must span over mutliple records are BLOBs, which a re binary large objects.\\
+				A BLOB being stored on multiple records are an advantage for like a movie the appropriate parts of the BLOB may be sent.
+			\subsubsection{Inserting a record}
+				To insert a record, empty space in a block may be found or new block may be created.\\
+				In case of a order such as a key descending the record must come in at appropriate point.\\
+				There are different methods for this:\\
+				An offset table which tells which records is in correct order. In case of a block not having space for the new record, the either largest or smallest appropriate to sorting is inserted into the next block.\\
+				An overfllow block which stores items which should belong to the current block and in case of that overflowing a new one is created.
+			\subsubsection{Deletion}
+				The deletion of a record, may lead to more space.\\
+				In case of of no order, the space is moved such the empty space is moved into the block buffer space.\\
+				To prevent pointers to the deleted object pointing wrongly gravestones are used.\\
+				These are either placed in the logical record map, or at the start of the physical position.
+		\subsection{Index}
+			\subsubsection{Indexing 101}
+				An index is a datastucture to find tubles, using constant attributes.\\
+				The attributes used for index is called index key.\\
+				To search for a tuble using index a balanced binary tree is created by the DBMS.\\
+				To create an index the following is done
+				\beginSQL
+		CREATE INDEX keyIndex ON table(KeyAttribute1, KeyAttribute2)
+				\end{lstlisting}
+				An index can be on as many attributes as wanted, and the order matters due to the first attribute in a multi index can also be used as a single index.\\
+				An index should be created in the case of many lookups but not many inserts, deletions and updates due to it being slowed down.\\
+				In most cases the most usefull index is the key due to it returning 1 tuble or nothing and speedsup a join.\\
+				Some DBMS includes tools which can suggest index options based on the query history.\\
+				The options are found through a greedy algorithms which simply test all possible outcomes, by reusing the history in the query optimizer to estimate the time save.\\
+				This is done over all options until non result in time save.
+			\subsubsection{Types of indexes}
+				A dense index is an index used with the attributes in order and pointers to the whole record.\\
+				This is faster due to the fewer data blocks, the abillity to binary search due to the order and the size being small enough to often keep in main memory.\\
+				A sparse block is even smaller only having a pointer and value to each block. This requires the datablocks to be sorted.\\
+				Multiple level index, is index of the index file.\\
+				Secondary index are index on non primary key and has therefore to be dense. \\
+				A usecase of the secondary index is the heap structure, the placement is not in order and therefore the secondary index is used.\\
+				A secondary index may waste space due to many records having the same value. The can be solved by buckets.\\
+				Here a indirect secondary indexare used\\
+				Very similary to the multilevel index, the index points towards a list of pointers to the records. Then each pointer between to index is for the same value.\\
+				This can also improve search time when buckets exist for multiple search conditions. Then when eliminating buckets for each condition only the records left with pointers are answers.\\
+				This methods saves I/O time due to only looking up the index and the final results.\\
+			\subsubsection{B-Trees}
+				B-Trees are balanced trees used for indexing. The balanced tree has a variable $n$ which determines the amount of children minus 1.\\
+				Therefore the structure of the tree is:\\
+				A node has $n+1$ pointers to blocks and $n-1$ keys. The relation between key and pointer is $p_1$ is lower than $k_1$ and $p_2$ is higher than $k_1$ but lower than $k_2$ etc...\\
+				A leaf will have $n-1$ keys and $n-1$ pointers to records, each corresponding to eachother. The n'th pointer is used for the next leaf in the tree in sequence.\\[4mm]
+				The trees root may only have 2 pointers and at every node and leaf at least half the pointers must be in use.\\
+				The leaf pointer to next leaf is used using a range search. Here the lower range is found and each record of the leaf is returned until the upper leaf is achieved.\\
+				When inserting into the tree and the node is already filled up, a sibling node is created. The keys are then splitted but there will always be one left which is inserted into the parent.\\
+				When removing, there are three cases:
+				\begin{itemize}
+					\item The removal can be done without problems
+					\item The removal leads to under half pointers are used, but a sibling leaf can transfer a pointer
+					\item The removal leads to under half pointers are used an the sibling can not transfer due its own limit, then the siblings are merged, and same deletion procedure is done at parent.
+				\end{itemize}
+				The tree wiil lead to very effective lookups, the typical tree has $n=255$, and by only 3 layers up to 16.6 million pointers can be stored. With root in main memory it will therefore only take 2 I/O lookups to find the pointer.
+			\subsubsection{Hashtables}
+				A hashtable for index is made of blocks the records can be stored in. In case of overflow a overflow bucket is created.\\
+				An ideal hash table will only take one I/O lookup but if many records are stored in a bucket the list has to be looked through.\\
+				An Extensible hash table, holds only pointers. When the buckets are overflowing, the bucket is split into two and the number of considered bits in the buckets from the hash are incrementet.\\
+				When illustrated the box to the left of the datablock is the number of considered bits in the hash value.\\
+				The hashing method, insures small buckets in the most minimal space, but it requires a lot of buckets for large data and the doubling takes a lot of computation.\\
+				Linear hashing is an alternative, with overflow buckets. The bucket key is $\lceil \log_2 n\rceil$ (where $n$ is the number of bucket) bits of the hash value from the right side.\\
+				If the keys binary value is larger than the number of bucket the far left bit is set to 0.\\
+				To determine if a new bucket is needed is if the current number of records $r$ exceeds $n$ times a ration like 1.7\\
+				When adding a new bucket in case of the number of buckets excced the possible bucket with the current number of bits used from the hash value $i$, then every key get a zero infront.\\
+	\section{NoSQL}
+		NoSQL are DBMS system, which differs from the RDBMS, in less constraints, not able to join and less structures data.\\
+		But it is faster and stores larger amouint of data, due to its large scaleability.\\
+		The structure of NoSQL does require schemas and therefore more flexible.\\
+		NoSQL comes in different data model:
+		\begin{itemize}
+			\item Graph - nodes contain data and edges connect data
+			\item Key-Value - A mapping between string key and primitive value
+			\item Coloumn family - Key and collection of values in coloumns
+			\item Document - JSON like model
+		\end{itemize}
+				
+			
 				\end{document}
